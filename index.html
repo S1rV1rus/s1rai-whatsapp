@@ -419,21 +419,21 @@
     .chat-header-avatar {
       width: 36px; height: 36px; border-radius: 50%;
       display: flex; align-items: center; justify-content: center;
+      background: hsl(258 32% 14%);
+      border: 1px solid hsl(var(--border-soft));
     }
     .robot-avatar-badge {
       position: absolute;
-      width: 80px; height: 80px;
-      left: -10px; bottom: -15px;
-      border-radius: 50%;
-      border: 3px solid hsl(258 35% 9%);
-      box-shadow: 0 16px 36px hsl(260 90% 2% / 0.85);
+      width: 95px; height: 95px;
+      left: -15px; bottom: -20px;
       z-index: 10;
-      object-fit: cover;
+      object-fit: contain;
+      filter: drop-shadow(0 16px 32px hsl(260 90% 2% / 0.85));
     }
     @media (min-width: 640px) {
       .robot-avatar-badge {
-        width: 110px; height: 110px;
-        left: -35px; bottom: -20px;
+        width: 135px; height: 135px;
+        left: -45px; bottom: -25px;
       }
     }
     .chat-header-name {
@@ -822,7 +822,7 @@
             <div class="chat-mockup" style="max-width:100%;">
               <div class="chat-header">
                 <div class="chat-header-avatar" style="width:36px; height:36px; border-radius:50%; overflow:hidden;">
-                  <img src="robotito.jpg" alt="Agente S1RAI" style="width:100%; height:100%; object-fit:cover;">
+                  <img src="robotito.png" alt="Agente S1RAI" style="width:100%; height:100%; object-fit:cover;">
                 </div>
                 <div style="flex:1;">
                   <div class="chat-header-name">Agente S1RAI</div>
@@ -838,7 +838,7 @@
               </div>
             </div>
             <!-- Robotito avatar overlapping -->
-            <img src="robotito.jpg" alt="Agente S1RAI" class="robot-avatar-badge" loading="lazy">
+            <img src="robotito.png" alt="Agente S1RAI" class="robot-avatar-badge" loading="lazy">
           </div>
         </div>
 
