@@ -241,40 +241,20 @@
     }
     @media (min-width: 1024px) {
       .navbar-inner {
-        display: grid; grid-template-columns: 1fr auto 1fr;
         padding: 20px 32px;
       }
     }
     .navbar-logo img {
       height: 40px; width: auto;
     }
-    .navbar-links {
-      display: none; align-items: center; justify-content: center; gap: 28px;
-      font-size: 15px;
-    }
-    @media (min-width: 1024px) { .navbar-links { display: flex; } }
     .navbar-auth {
-      display: flex; align-items: center; justify-content: flex-end; gap: 12px;
+      display: flex; align-items: center; justify-content: flex-end;
     }
-    .navbar-auth .wa-btn { display: none; font-size: 13px; padding: 10px 20px; }
-    @media (min-width: 640px) { .navbar-auth .wa-btn { display: inline-flex; } }
+    .navbar-auth .wa-btn { display: inline-flex; font-size: 13px; padding: 10px 20px; }
     .navbar-divider {
       height: 1px; margin-top: 3px;
       background: linear-gradient(to right, transparent, hsl(var(--foreground) / 0.2), transparent);
     }
-    .hamburger { display: block; padding: 4px; }
-    @media (min-width: 1024px) { .hamburger { display: none; } }
-
-    .mobile-menu {
-      display: none;
-      flex-direction: column; gap: 16px;
-      padding: 20px 24px;
-      border-bottom: 1px solid hsl(var(--border));
-      font-size: 16px;
-    }
-    .mobile-menu.open { display: flex; }
-    .mobile-menu-btns { display: flex; flex-direction: column; gap: 12px; margin-top: 4px; }
-    .mobile-menu-btns .wa-btn { justify-content: center; padding: 14px; }
 
     /* ═══════════════════════════════════════════════════════════
        HERO
@@ -341,7 +321,7 @@
       font-size: 15px; color: hsl(var(--foreground) / 0.6);
       white-space: nowrap;
     }
-    .marquee-item svg { width: 22px; height: 22px; flex-shrink: 0; }
+    .marquee-item img { width: 22px; height: 22px; flex-shrink: 0; object-fit: contain; }
 
     /* ═══════════════════════════════════════════════════════════
        FEATURES
@@ -400,6 +380,7 @@
       display: flex; align-items: center; justify-content: center;
       margin-bottom: 14px; font-size: 28px;
     }
+    .integration-icon img { width: 28px; height: 28px; flex-shrink: 0; object-fit: contain; }
     .integration-card h3 {
       font-family: "General Sans", system-ui, sans-serif;
       font-size: 16px; font-weight: 600; margin-bottom: 4px;
@@ -625,39 +606,14 @@
         <img src="s1r-logo.png" alt="S1RAI">
       </a>
 
-      <div class="navbar-links font-body">
-        <a href="#funcionalidades" class="nav-link">Producto</a>
-        <a href="#integraciones" class="nav-link">Integraciones</a>
-        <a href="#testimonios" class="nav-link">Clientes</a>
-        <a href="#contacto" class="nav-link">Contacto</a>
-      </div>
-
       <div class="navbar-auth">
         <a href="https://wa.me/5491123381030?text=Hola!%20Quiero%20saber%20más%20sobre%20los%20agentes%20de%20WhatsApp" class="wa-btn font-body">
           <svg viewBox="0 0 24 24" fill="currentColor" style="width:16px;height:16px;"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
           Pedir presupuesto
         </a>
-        <button class="hamburger" id="hamburgerBtn" aria-label="Menú">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" style="width:22px;height:22px;" id="hamburgerIcon">
-            <path d="M3 6h18"/><path d="M3 12h18"/><path d="M3 18h18"/>
-          </svg>
-        </button>
       </div>
     </nav>
     <div class="navbar-divider"></div>
-
-    <div class="mobile-menu font-body" id="mobileMenu">
-      <a href="#funcionalidades" class="nav-link">Producto</a>
-      <a href="#integraciones" class="nav-link">Integraciones</a>
-      <a href="#testimonios" class="nav-link">Clientes</a>
-      <a href="#contacto" class="nav-link">Contacto</a>
-      <div class="mobile-menu-btns">
-        <a href="https://wa.me/5491123381030?text=Hola!%20Quiero%20saber%20más%20sobre%20los%20agentes%20de%20WhatsApp" class="wa-btn font-body">
-          <svg viewBox="0 0 24 24" fill="currentColor" style="width:16px;height:16px;"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-          Pedir presupuesto
-        </a>
-      </div>
-    </div>
   </header>
 
   <!-- ══════════════════════════════════════════════════════════
@@ -703,68 +659,68 @@
         <div class="marquee-track">
           <!-- Set 1 -->
           <span class="marquee-item">
-            <svg viewBox="0 0 24 24" fill="#96bf48"><path d="M15.34 3.28c-.06.02-.13.06-.19.1-.06.04-.13.08-.19.13a2.5 2.5 0 00-.38.35c-.11.12-.19.26-.27.41-.08.15-.13.31-.16.49a1.5 1.5 0 00.04.99c.08.2.2.38.35.51.15.14.34.25.55.33.21.07.45.11.71.11.15 0 .3-.01.45-.04L15.34 3.28zM20.5 7.28l-1.96-.34-.88-1.71-.06-.08L16.79 12l3.45-.75.26-3.97zM17.6 5.16l-.1-.01-.81 3.97 1.58-.34-.67-3.62zM13.85 8.66l-.75 2.27s-.33-.18-.71-.18c-1.15 0-1.21.73-1.21.9 0 .99 1.29 1.36 1.29 2.68 0 1.32-.84 2.17-1.98 2.17-1.36 0-2.06-.85-2.06-.85l.36-1.21s.71.61 1.33.61c.4 0 .56-.31.56-.55 0-1.29-1.06-1.35-1.06-2.53 0-1.3.96-2.55 2.89-2.55.74 0 1.1.21 1.1.21l.24.03z"/></svg>
+            <img src="shopify.svg" alt="Shopify">
             Shopify
           </span>
           <span class="marquee-item">
-            <svg viewBox="0 0 24 24" fill="#9B5C8F"><path d="M2 4a2 2 0 00-2 2v9a2 2 0 002 2h1.2l1.3 3.5a.5.5 0 00.94-.02L6.9 17H17.1l1.46 3.48a.5.5 0 00.94.02L20.8 17H22a2 2 0 002-2V6a2 2 0 00-2-2H2z"/></svg>
+            <img src="woocommerce.svg" alt="WooCommerce">
             WooCommerce
           </span>
           <span class="marquee-item">
-            <svg viewBox="0 0 24 24" fill="#714B67"><rect x="2" y="2" width="20" height="20" rx="4"/><circle cx="8.5" cy="12" r="3" fill="hsl(258 35% 9%)"/><circle cx="15.5" cy="12" r="3" fill="hsl(258 35% 9%)"/></svg>
+            <img src="odoo.svg" alt="Odoo">
             Odoo
           </span>
           <span class="marquee-item">
-            <svg viewBox="0 0 24 24" fill="#FF7A59"><path d="M16.75 8.15V5.53a1.9 1.9 0 001.12-1.72 1.91 1.91 0 00-3.82 0c0 .75.44 1.39 1.07 1.7v2.64a5.23 5.23 0 00-2.7 1.35L5.88 4.67a1.74 1.74 0 00.06-.44A1.73 1.73 0 104.2 5.96a1.72 1.72 0 001-.35l6.4 4.77a5.29 5.29 0 00-.84 2.85 5.32 5.32 0 00.95 3.03l-1.96 2.38a1.52 1.52 0 00-.46-.08 1.54 1.54 0 101.54 1.54 1.5 1.5 0 00-.2-.72l1.91-2.33a5.26 5.26 0 008.21-4.35 5.24 5.24 0 00-3-4.55zm-1.63 7.93a3.02 3.02 0 110-6.04 3.02 3.02 0 010 6.04z"/></svg>
+            <img src="hubspot.svg" alt="HubSpot">
             HubSpot
           </span>
           <span class="marquee-item">
-            <svg viewBox="0 0 24 24" fill="#34A853"><path d="M19.5 6H16V3.5L19.5 6zM4 2v20h16V7h-5V2H4zm7 14H7v-2h4v2zm6-4H7v-2h10v2zm0-4H7V6h10v2z"/></svg>
+            <img src="googlesheets.svg" alt="Google Sheets">
             Google Sheets
           </span>
           <span class="marquee-item">
-            <svg viewBox="0 0 24 24" fill="#FFE600"><circle cx="12" cy="12" r="10"/><path d="M7 14c0-2.76 2.24-5 5-5s5 2.24 5 5" fill="none" stroke="hsl(258 35% 9%)" stroke-width="2" stroke-linecap="round"/><path d="M6 10.5S8 7 12 7s6 3.5 6 3.5" fill="none" stroke="hsl(258 35% 9%)" stroke-width="1.5" stroke-linecap="round"/></svg>
+            <img src="mercadolibre.svg" alt="Mercado Libre">
             Mercado Libre
           </span>
           <span class="marquee-item">
-            <svg viewBox="0 0 24 24" fill="none" stroke="#006BFF" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/><circle cx="12" cy="16" r="1" fill="#006BFF"/></svg>
+            <img src="calendly.svg" alt="Calendly">
             Calendly
           </span>
           <span class="marquee-item">
-            <svg viewBox="0 0 24 24" fill="#FF4A00"><path d="M12 2l2.09 6.26L20.18 9l-4.64 4.14L16.73 20 12 16.27 7.27 20l1.19-6.86L3.82 9l6.09-.74L12 2z"/></svg>
+            <img src="zapier.svg" alt="Zapier">
             Zapier
           </span>
           <!-- Set 2 (duplicate for seamless loop) -->
           <span class="marquee-item">
-            <svg viewBox="0 0 24 24" fill="#96bf48"><path d="M15.34 3.28c-.06.02-.13.06-.19.1-.06.04-.13.08-.19.13a2.5 2.5 0 00-.38.35c-.11.12-.19.26-.27.41-.08.15-.13.31-.16.49a1.5 1.5 0 00.04.99c.08.2.2.38.35.51.15.14.34.25.55.33.21.07.45.11.71.11.15 0 .3-.01.45-.04L15.34 3.28zM20.5 7.28l-1.96-.34-.88-1.71-.06-.08L16.79 12l3.45-.75.26-3.97zM17.6 5.16l-.1-.01-.81 3.97 1.58-.34-.67-3.62zM13.85 8.66l-.75 2.27s-.33-.18-.71-.18c-1.15 0-1.21.73-1.21.9 0 .99 1.29 1.36 1.29 2.68 0 1.32-.84 2.17-1.98 2.17-1.36 0-2.06-.85-2.06-.85l.36-1.21s.71.61 1.33.61c.4 0 .56-.31.56-.55 0-1.29-1.06-1.35-1.06-2.53 0-1.3.96-2.55 2.89-2.55.74 0 1.1.21 1.1.21l.24.03z"/></svg>
+            <img src="shopify.svg" alt="Shopify">
             Shopify
           </span>
           <span class="marquee-item">
-            <svg viewBox="0 0 24 24" fill="#9B5C8F"><path d="M2 4a2 2 0 00-2 2v9a2 2 0 002 2h1.2l1.3 3.5a.5.5 0 00.94-.02L6.9 17H17.1l1.46 3.48a.5.5 0 00.94.02L20.8 17H22a2 2 0 002-2V6a2 2 0 00-2-2H2z"/></svg>
+            <img src="woocommerce.svg" alt="WooCommerce">
             WooCommerce
           </span>
           <span class="marquee-item">
-            <svg viewBox="0 0 24 24" fill="#714B67"><rect x="2" y="2" width="20" height="20" rx="4"/><circle cx="8.5" cy="12" r="3" fill="hsl(258 35% 9%)"/><circle cx="15.5" cy="12" r="3" fill="hsl(258 35% 9%)"/></svg>
+            <img src="odoo.svg" alt="Odoo">
             Odoo
           </span>
           <span class="marquee-item">
-            <svg viewBox="0 0 24 24" fill="#FF7A59"><path d="M16.75 8.15V5.53a1.9 1.9 0 001.12-1.72 1.91 1.91 0 00-3.82 0c0 .75.44 1.39 1.07 1.7v2.64a5.23 5.23 0 00-2.7 1.35L5.88 4.67a1.74 1.74 0 00.06-.44A1.73 1.73 0 104.2 5.96a1.72 1.72 0 001-.35l6.4 4.77a5.29 5.29 0 00-.84 2.85 5.32 5.32 0 00.95 3.03l-1.96 2.38a1.52 1.52 0 00-.46-.08 1.54 1.54 0 101.54 1.54 1.5 1.5 0 00-.2-.72l1.91-2.33a5.26 5.26 0 008.21-4.35 5.24 5.24 0 00-3-4.55zm-1.63 7.93a3.02 3.02 0 110-6.04 3.02 3.02 0 010 6.04z"/></svg>
+            <img src="hubspot.svg" alt="HubSpot">
             HubSpot
           </span>
           <span class="marquee-item">
-            <svg viewBox="0 0 24 24" fill="#34A853"><path d="M19.5 6H16V3.5L19.5 6zM4 2v20h16V7h-5V2H4zm7 14H7v-2h4v2zm6-4H7v-2h10v2zm0-4H7V6h10v2z"/></svg>
+            <img src="googlesheets.svg" alt="Google Sheets">
             Google Sheets
           </span>
           <span class="marquee-item">
-            <svg viewBox="0 0 24 24" fill="#FFE600"><circle cx="12" cy="12" r="10"/><path d="M7 14c0-2.76 2.24-5 5-5s5 2.24 5 5" fill="none" stroke="hsl(258 35% 9%)" stroke-width="2" stroke-linecap="round"/><path d="M6 10.5S8 7 12 7s6 3.5 6 3.5" fill="none" stroke="hsl(258 35% 9%)" stroke-width="1.5" stroke-linecap="round"/></svg>
+            <img src="mercadolibre.svg" alt="Mercado Libre">
             Mercado Libre
           </span>
           <span class="marquee-item">
-            <svg viewBox="0 0 24 24" fill="none" stroke="#006BFF" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/><circle cx="12" cy="16" r="1" fill="#006BFF"/></svg>
+            <img src="calendly.svg" alt="Calendly">
             Calendly
           </span>
           <span class="marquee-item">
-            <svg viewBox="0 0 24 24" fill="#FF4A00"><path d="M12 2l2.09 6.26L20.18 9l-4.64 4.14L16.73 20 12 16.27 7.27 20l1.19-6.86L3.82 9l6.09-.74L12 2z"/></svg>
+            <img src="zapier.svg" alt="Zapier">
             Zapier
           </span>
         </div>
@@ -931,57 +887,57 @@
 
       <div class="grid-4" style="max-width:1200px;margin:0 auto;">
         <div class="card-reveal card-bg integration-card">
-          <div class="integration-icon" style="color:#96bf48;">
-            <svg viewBox="0 0 24 24" fill="currentColor" style="width:28px;height:28px;"><path d="M15.34 3.28c-.06.02-.13.06-.19.1-.06.04-.13.08-.19.13a2.5 2.5 0 00-.38.35c-.11.12-.19.26-.27.41-.08.15-.13.31-.16.49a1.5 1.5 0 00.04.99c.08.2.2.38.35.51.15.14.34.25.55.33.21.07.45.11.71.11.15 0 .3-.01.45-.04L15.34 3.28zM20.5 7.28l-1.96-.34-.88-1.71-.06-.08L16.79 12l3.45-.75.26-3.97zM17.6 5.16l-.1-.01-.81 3.97 1.58-.34-.67-3.62zM13.85 8.66l-.75 2.27s-.33-.18-.71-.18c-1.15 0-1.21.73-1.21.9 0 .99 1.29 1.36 1.29 2.68 0 1.32-.84 2.17-1.98 2.17-1.36 0-2.06-.85-2.06-.85l.36-1.21s.71.61 1.33.61c.4 0 .56-.31.56-.55 0-1.29-1.06-1.35-1.06-2.53 0-1.3.96-2.55 2.89-2.55.74 0 1.1.21 1.1.21l.24.03z"/></svg>
+          <div class="integration-icon">
+            <img src="shopify.svg" alt="Shopify">
           </div>
           <h3>Shopify</h3>
           <p>Sincronizá productos, precios y pedidos directamente desde tu tienda.</p>
         </div>
         <div class="card-reveal card-bg integration-card" style="transition-delay:60ms;">
-          <div class="integration-icon" style="color:#9B5C8F;">
-            <svg viewBox="0 0 24 24" fill="currentColor" style="width:28px;height:28px;"><path d="M2 4a2 2 0 00-2 2v9a2 2 0 002 2h1.2l1.3 3.5a.5.5 0 00.94-.02L6.9 17H17.1l1.46 3.48a.5.5 0 00.94.02L20.8 17H22a2 2 0 002-2V6a2 2 0 00-2-2H2z"/></svg>
+          <div class="integration-icon">
+            <img src="woocommerce.svg" alt="WooCommerce">
           </div>
           <h3>WooCommerce</h3>
           <p>Conectá tu tienda WordPress y gestioná ventas por WhatsApp.</p>
         </div>
         <div class="card-reveal card-bg integration-card" style="transition-delay:120ms;">
-          <div class="integration-icon" style="color:#714B67;">
-            <svg viewBox="0 0 24 24" fill="currentColor" style="width:28px;height:28px;"><rect x="2" y="2" width="20" height="20" rx="4"/><circle cx="8.5" cy="12" r="3" fill="hsl(258 35% 9%)"/><circle cx="15.5" cy="12" r="3" fill="hsl(258 35% 9%)"/></svg>
+          <div class="integration-icon">
+            <img src="odoo.svg" alt="Odoo">
           </div>
           <h3>Odoo</h3>
           <p>ERP completo: inventario, facturación, CRM y más en un solo lugar.</p>
         </div>
         <div class="card-reveal card-bg integration-card" style="transition-delay:180ms;">
-          <div class="integration-icon" style="color:#FF7A59;">
-            <svg viewBox="0 0 24 24" fill="currentColor" style="width:28px;height:28px;"><path d="M16.75 8.15V5.53a1.9 1.9 0 001.12-1.72 1.91 1.91 0 00-3.82 0c0 .75.44 1.39 1.07 1.7v2.64a5.23 5.23 0 00-2.7 1.35L5.88 4.67a1.74 1.74 0 00.06-.44A1.73 1.73 0 104.2 5.96a1.72 1.72 0 001-.35l6.4 4.77a5.29 5.29 0 00-.84 2.85 5.32 5.32 0 00.95 3.03l-1.96 2.38a1.52 1.52 0 00-.46-.08 1.54 1.54 0 101.54 1.54 1.5 1.5 0 00-.2-.72l1.91-2.33a5.26 5.26 0 008.21-4.35 5.24 5.24 0 00-3-4.55zm-1.63 7.93a3.02 3.02 0 110-6.04 3.02 3.02 0 010 6.04z"/></svg>
+          <div class="integration-icon">
+            <img src="hubspot.svg" alt="HubSpot">
           </div>
           <h3>HubSpot</h3>
           <p>CRM y marketing automation. Leads de WhatsApp directo a tu pipeline.</p>
         </div>
         <div class="card-reveal card-bg integration-card" style="transition-delay:240ms;">
-          <div class="integration-icon" style="color:#34A853;">
-            <svg viewBox="0 0 24 24" fill="currentColor" style="width:28px;height:28px;"><path d="M19.5 6H16V3.5L19.5 6zM4 2v20h16V7h-5V2H4zm7 14H7v-2h4v2zm6-4H7v-2h10v2zm0-4H7V6h10v2z"/></svg>
+          <div class="integration-icon">
+            <img src="googlesheets.svg" alt="Google Sheets">
           </div>
           <h3>Google Sheets</h3>
           <p>Exportá conversaciones, leads y ventas a planillas en tiempo real.</p>
         </div>
         <div class="card-reveal card-bg integration-card" style="transition-delay:300ms;">
-          <div class="integration-icon" style="color:#FFE600;">
-            <svg viewBox="0 0 24 24" fill="currentColor" style="width:28px;height:28px;"><circle cx="12" cy="12" r="10"/><path d="M7 14c0-2.76 2.24-5 5-5s5 2.24 5 5" fill="none" stroke="hsl(258 35% 9%)" stroke-width="2" stroke-linecap="round"/><path d="M6 10.5S8 7 12 7s6 3.5 6 3.5" fill="none" stroke="hsl(258 35% 9%)" stroke-width="1.5" stroke-linecap="round"/></svg>
+          <div class="integration-icon">
+            <img src="mercadolibre.svg" alt="Mercado Libre">
           </div>
           <h3>Mercado Libre</h3>
           <p>Gestión de consultas de compradores directo desde el marketplace.</p>
         </div>
         <div class="card-reveal card-bg integration-card" style="transition-delay:360ms;">
-          <div class="integration-icon" style="color:#006BFF;">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="width:28px;height:28px;"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/><circle cx="12" cy="16" r="1" fill="currentColor"/></svg>
+          <div class="integration-icon">
+            <img src="calendly.svg" alt="Calendly">
           </div>
           <h3>Calendly</h3>
           <p>Agenda reuniones y demos directamente desde la conversación.</p>
         </div>
         <div class="card-reveal card-bg integration-card" style="transition-delay:420ms;">
-          <div class="integration-icon" style="color:#FF4A00;">
-            <svg viewBox="0 0 24 24" fill="currentColor" style="width:28px;height:28px;"><path d="M12 2l2.09 6.26L20.18 9l-4.64 4.14L16.73 20 12 16.27 7.27 20l1.19-6.86L3.82 9l6.09-.74L12 2z"/></svg>
+          <div class="integration-icon">
+            <img src="zapier.svg" alt="Zapier">
           </div>
           <h3>Zapier</h3>
           <p>Conectá con +5.000 apps. Automatizá cualquier flujo de trabajo.</p>
@@ -1133,26 +1089,6 @@
       });
     }, { threshold: 0.12 });
     document.querySelectorAll('.card-reveal').forEach(el => observer.observe(el));
-
-    // Mobile menu
-    const hamburgerBtn = document.getElementById('hamburgerBtn');
-    const mobileMenu = document.getElementById('mobileMenu');
-    const hamburgerIcon = document.getElementById('hamburgerIcon');
-    let menuOpen = false;
-    hamburgerBtn.addEventListener('click', () => {
-      menuOpen = !menuOpen;
-      mobileMenu.classList.toggle('open');
-      hamburgerIcon.innerHTML = menuOpen
-        ? '<path d="M18 6 6 18"/><path d="m6 6 12 12"/>'
-        : '<path d="M3 6h18"/><path d="M3 12h18"/><path d="M3 18h18"/>';
-    });
-    mobileMenu.querySelectorAll('a').forEach(link => {
-      link.addEventListener('click', () => {
-        menuOpen = false;
-        mobileMenu.classList.remove('open');
-        hamburgerIcon.innerHTML = '<path d="M3 6h18"/><path d="M3 12h18"/><path d="M3 18h18"/>';
-      });
-    });
 
     // Smooth scroll
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
