@@ -1,0 +1,16 @@
+{
+  "name": "s1r-whatsapp",
+  "version": "1.0.0",
+  "description": "Agentes de WhatsApp para Argentina",
+  "main": "index.html",
+  "scripts": {
+    "build": "echo 'Static site'"
+  },
+  "keywords": [
+    "whatsapp",
+    "agents",
+    "ai"
+  ],
+  "author": "Guido Iriarte",
+  "license": "MIT"
+}
