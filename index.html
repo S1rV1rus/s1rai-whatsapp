@@ -418,8 +418,23 @@
     }
     .chat-header-avatar {
       width: 36px; height: 36px; border-radius: 50%;
-      background: linear-gradient(140deg, #25D366, #128C7E);
       display: flex; align-items: center; justify-content: center;
+    }
+    .robot-avatar-badge {
+      position: absolute;
+      width: 80px; height: 80px;
+      left: -10px; bottom: -15px;
+      border-radius: 50%;
+      border: 3px solid hsl(258 35% 9%);
+      box-shadow: 0 16px 36px hsl(260 90% 2% / 0.85);
+      z-index: 10;
+      object-fit: cover;
+    }
+    @media (min-width: 640px) {
+      .robot-avatar-badge {
+        width: 110px; height: 110px;
+        left: -35px; bottom: -20px;
+      }
     }
     .chat-header-name {
       font-family: "General Sans", system-ui, sans-serif;
@@ -803,23 +818,27 @@
           <p class="font-display" style="font-size:19px;font-weight:500;line-height:1.4;margin-bottom:22px;max-width:420px;">
             <span style="color:var(--wa-green);">Mirá</span> cómo tu agente atiende por WhatsApp
           </p>
-          <div class="chat-mockup">
-            <div class="chat-header">
-              <div class="chat-header-avatar">
-                <svg viewBox="0 0 24 24" fill="#fff" style="width:18px;height:18px;"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+          <div style="position:relative; max-width:340px; margin:0 auto;">
+            <div class="chat-mockup" style="max-width:100%;">
+              <div class="chat-header">
+                <div class="chat-header-avatar" style="width:36px; height:36px; border-radius:50%; overflow:hidden;">
+                  <img src="robotito.jpg" alt="Agente S1RAI" style="width:100%; height:100%; object-fit:cover;">
+                </div>
+                <div style="flex:1;">
+                  <div class="chat-header-name">Agente S1RAI</div>
+                  <div class="chat-header-status">● En línea</div>
+                </div>
               </div>
-              <div style="flex:1;">
-                <div class="chat-header-name">Agente S1RAI</div>
-                <div class="chat-header-status">● En línea</div>
+              <div class="chat-body">
+                <div class="chat-bubble incoming">¡Hola! 👋 Soy el asistente de <b>Tu Tienda</b>. ¿En qué puedo ayudarte?<span class="time">14:02</span></div>
+                <div class="chat-bubble outgoing">Hola, quiero ver las zapatillas que tienen<span class="time">14:02</span></div>
+                <div class="chat-bubble incoming">¡Perfecto! Te muestro las más vendidas 🔥<br><br>👟 <b>Nike Air Max 90</b> — $89.990<br>👟 <b>Adidas Ultraboost</b> — $94.990<br>👟 <b>New Balance 574</b> — $74.990<br><br>¿Querés ver alguna en detalle o te paso el link de pago?<span class="time">14:02</span></div>
+                <div class="chat-bubble outgoing">Las Nike! Talle 42<span class="time">14:03</span></div>
+                <div class="chat-typing"><span></span><span></span><span></span></div>
               </div>
             </div>
-            <div class="chat-body">
-              <div class="chat-bubble incoming">¡Hola! 👋 Soy el asistente de <b>Tu Tienda</b>. ¿En qué puedo ayudarte?<span class="time">14:02</span></div>
-              <div class="chat-bubble outgoing">Hola, quiero ver las zapatillas que tienen<span class="time">14:02</span></div>
-              <div class="chat-bubble incoming">¡Perfecto! Te muestro las más vendidas 🔥<br><br>👟 <b>Nike Air Max 90</b> — $89.990<br>👟 <b>Adidas Ultraboost</b> — $94.990<br>👟 <b>New Balance 574</b> — $74.990<br><br>¿Querés ver alguna en detalle o te paso el link de pago?<span class="time">14:02</span></div>
-              <div class="chat-bubble outgoing">Las Nike! Talle 42<span class="time">14:03</span></div>
-              <div class="chat-typing"><span></span><span></span><span></span></div>
-            </div>
+            <!-- Robotito avatar overlapping -->
+            <img src="robotito.jpg" alt="Agente S1RAI" class="robot-avatar-badge" loading="lazy">
           </div>
         </div>
 
