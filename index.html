@@ -1,78 +1,1491 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>s1r.com.ar - Agentes de WhatsApp</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="color-scheme" content="dark">
+  <meta name="darkreader-lock">
+  <meta name="description" content="Agentes de WhatsApp con IA que venden, atienden y califican leads 24/7. Automatizá tu negocio con S1RAI.">
+  <title>S1RAI — Agentes de WhatsApp con IA</title>
+  <link rel="icon" type="image/png" href="favicon.png">
 
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #333;
-        }
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://api.fontshare.com/v2/css?f[]=general-sans@400,500,600,700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&display=swap" rel="stylesheet">
 
-        .container {
-            text-align: center;
-            background: white;
-            padding: 60px 40px;
-            border-radius: 12px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-            max-width: 600px;
-            width: 90%;
-        }
+  <style>
+    /* ═══════════════════════════════════════════════════════════
+       DESIGN TOKENS — replicated from s1rai.com.ar
+       ═══════════════════════════════════════════════════════════ */
+    :root {
+      --background: 260 87% 3%;
+      --foreground: 40 6% 95%;
+      --hero-sub: 40 6% 82%;
+      --muted: 255 11% 63%;
+      --border: 255 20% 18%;
+      --border-soft: 255 16% 13%;
+      --check: #34d399;
+      --lime: #c4ee4f;
+      --wa-green: #25D366;
+      --accent-grad: linear-gradient(to left, #6366f1, #a855f7, #fcd34d);
+    }
 
-        h1 {
-            font-size: 2.5em;
-            margin-bottom: 20px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
+    /* ═══════════════════════════════════════════════════════════
+       RESET & BASE
+       ═══════════════════════════════════════════════════════════ */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      background: hsl(var(--background));
+      color: hsl(var(--foreground));
+      font-family: "Geist", system-ui, sans-serif;
+      -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
+      overflow-x: hidden;
+      line-height: 1.6;
+    }
+    a { text-decoration: none; color: inherit; }
+    button { cursor: pointer; background: none; border: none; color: inherit; font: inherit; }
+    ul { list-style: none; }
+    img { display: block; max-width: 100%; }
+    ::selection { background: hsl(258 90% 65% / 0.35); }
 
-        p {
-            font-size: 1.1em;
-            color: #666;
-            line-height: 1.6;
-            margin-bottom: 30px;
-        }
+    .font-display { font-family: "General Sans", system-ui, sans-serif; }
+    .font-body { font-family: "Geist", system-ui, sans-serif; }
 
-        .badge {
-            display: inline-block;
-            background: #667eea;
-            color: white;
-            padding: 8px 16px;
-            border-radius: 20px;
-            font-size: 0.9em;
-            margin-top: 20px;
-        }
+    /* ═══════════════════════════════════════════════════════════
+       ACCENT TEXT
+       ═══════════════════════════════════════════════════════════ */
+    .accent-text {
+      background: var(--accent-grad);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      color: transparent;
+    }
+    .wa-accent {
+      background: linear-gradient(to right, #25D366, #128C7E, #c4ee4f);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      color: transparent;
+    }
 
-        footer {
-            margin-top: 40px;
-            font-size: 0.9em;
-            color: #999;
-        }
-    </style>
+    /* ═══════════════════════════════════════════════════════════
+       HERO BACKGROUND
+       ═══════════════════════════════════════════════════════════ */
+    .hero-fallback {
+      background:
+        radial-gradient(120% 90% at 50% 8%, hsl(258 60% 10% / 0.9) 0%, transparent 55%),
+        radial-gradient(80% 70% at 80% 100%, hsl(266 70% 8% / 0.7) 0%, transparent 60%),
+        hsl(var(--background));
+    }
+
+    /* ═══════════════════════════════════════════════════════════
+       ANIMATIONS
+       ═══════════════════════════════════════════════════════════ */
+    @keyframes breathe {
+      0%, 100% { opacity: 0.85; }
+      50% { opacity: 0.95; }
+    }
+    .blur-shape {
+      width: 984px; height: 527px;
+      background: hsl(var(--background));
+      filter: blur(82px);
+      opacity: 0.9;
+      animation: breathe 4s ease-in-out infinite;
+    }
+
+    @keyframes rise-in {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .rise {
+      animation-name: rise-in;
+      animation-duration: 0.85s;
+      animation-timing-function: cubic-bezier(0.22, 0.7, 0.18, 1);
+      animation-delay: var(--rise-delay, 0s);
+      animation-fill-mode: both;
+    }
+
+    @keyframes firefly {
+      0%, 100% { opacity: 0.3; box-shadow: 0 0 0 0 transparent; }
+      50% { opacity: 1; box-shadow: 0 0 5px 0px var(--wa-green); }
+    }
+    .firefly-dot { animation: firefly 2.4s ease-in-out infinite; }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-12px); }
+    }
+    .float-anim { animation: float 3.5s ease-in-out infinite; }
+
+    @keyframes pulse-glow {
+      0%, 100% { box-shadow: 0 0 20px -4px hsl(152 70% 40% / 0.3); }
+      50% { box-shadow: 0 0 40px -4px hsl(152 70% 40% / 0.6); }
+    }
+
+    /* ── Scroll reveal ─────────────────────────────────────── */
+    .card-reveal {
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity 0.7s cubic-bezier(0.22,0.7,0.18,1), transform 0.7s cubic-bezier(0.22,0.7,0.18,1);
+    }
+    .card-reveal.in { opacity: 1; transform: translateY(0); }
+
+    /* ═══════════════════════════════════════════════════════════
+       BUTTONS
+       ═══════════════════════════════════════════════════════════ */
+    .nav-link { transition: color 0.25s ease; color: hsl(var(--foreground) / 0.9); }
+    .nav-link:hover { color: hsl(var(--foreground)); }
+
+    .glow-btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      border-radius: 999px;
+      font-size: 15px;
+      border: 1px solid hsl(var(--foreground) / 0.2);
+      padding: 16px 28px;
+      transition: box-shadow 0.35s ease, border-color 0.35s ease, background 0.35s ease, transform 0.2s ease;
+    }
+    .glow-btn:hover {
+      border-color: hsl(var(--foreground) / 0.55);
+      box-shadow: 0 0 0 1px hsl(var(--foreground) / 0.1), 0 0 32px -6px hsl(258 90% 65% / 0.55);
+    }
+
+    .brand-btn {
+      position: relative; display: inline-flex; align-items: center; justify-content: center;
+      background: linear-gradient(95deg, #f5a623 0%, #ec4899 32%, #a855f7 64%, #4f7df6 100%);
+      color: #fff; border: none; border-radius: 999px;
+      font-weight: 500; font-size: 14px;
+      padding: 12px 24px;
+      transition: filter 0.3s ease, box-shadow 0.3s ease, transform 0.2s ease;
+    }
+    .brand-btn:hover {
+      filter: brightness(1.07) saturate(1.05);
+      box-shadow: 0 6px 26px -8px hsl(282 80% 55% / 0.75), 0 0 0 1px hsl(282 80% 70% / 0.3) inset;
+      transform: translateY(-1px);
+    }
+
+    .outline-btn {
+      display: inline-flex; align-items: center; justify-content: center;
+      border: 1px solid hsl(var(--foreground) / 0.25);
+      border-radius: 999px; padding: 12px 24px;
+      font-weight: 500; font-size: 14px;
+      transition: border-color 0.3s ease, background 0.3s ease;
+    }
+    .outline-btn:hover { border-color: hsl(var(--foreground) / 0.55); background: hsl(var(--foreground) / 0.04); }
+
+    .wa-btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: #25D366; color: #fff;
+      border: none; border-radius: 999px;
+      font-weight: 600; font-size: 15px;
+      padding: 16px 30px;
+      transition: filter 0.3s ease, box-shadow 0.3s ease, transform 0.2s ease;
+    }
+    .wa-btn:hover {
+      filter: brightness(1.08);
+      box-shadow: 0 0 36px -6px hsl(142 70% 45% / 0.6);
+      transform: translateY(-1px);
+    }
+
+    /* ═══════════════════════════════════════════════════════════
+       CARDS
+       ═══════════════════════════════════════════════════════════ */
+    .card-bg {
+      background: linear-gradient(180deg, hsl(258 35% 9%) 0%, hsl(var(--background)) 100%);
+    }
+    .liquid-glass {
+      background: rgba(255,255,255,.01);
+      backdrop-filter: blur(4px);
+      box-shadow: inset 0 1px 1px rgba(255,255,255,.1);
+      position: relative; overflow: hidden;
+    }
+    .liquid-glass::before {
+      content: "";
+      position: absolute; inset: 0;
+      border-radius: inherit;
+      padding: 1.4px;
+      background: linear-gradient(180deg, rgba(255,255,255,.45) 0%, rgba(255,255,255,.15) 20%, rgba(255,255,255,0) 40%, rgba(255,255,255,0) 60%, rgba(255,255,255,.15) 80%, rgba(255,255,255,.45) 100%);
+      -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      -webkit-mask-composite: xor;
+      mask-composite: exclude;
+      pointer-events: none;
+    }
+
+    /* ═══════════════════════════════════════════════════════════
+       PRICING GLOW
+       ═══════════════════════════════════════════════════════════ */
+    .pricing-glow {
+      background:
+        radial-gradient(60% 50% at 88% 6%, hsl(80 70% 45% / 0.10) 0%, transparent 60%),
+        radial-gradient(50% 50% at 6% 96%, hsl(272 80% 45% / 0.12) 0%, transparent 60%);
+    }
+
+    /* ═══════════════════════════════════════════════════════════
+       LAYOUT UTILITIES
+       ═══════════════════════════════════════════════════════════ */
+    .container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+    .section-padding { padding: 96px 0; }
+    .text-center { text-align: center; }
+    .mx-auto { margin-left: auto; margin-right: auto; }
+
+    .grid-2 { display: grid; grid-template-columns: 1fr; gap: 20px; }
+    .grid-3 { display: grid; grid-template-columns: 1fr; gap: 20px; }
+    .grid-4 { display: grid; grid-template-columns: 1fr; gap: 20px; }
+
+    @media (min-width: 640px) {
+      .grid-2 { grid-template-columns: repeat(2, 1fr); }
+      .grid-3 { grid-template-columns: repeat(2, 1fr); }
+      .grid-4 { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (min-width: 1024px) {
+      .grid-3 { grid-template-columns: repeat(3, 1fr); }
+      .grid-4 { grid-template-columns: repeat(4, 1fr); }
+    }
+
+    /* ═══════════════════════════════════════════════════════════
+       NAVBAR
+       ═══════════════════════════════════════════════════════════ */
+    .navbar {
+      position: relative; z-index: 50; width: 100%;
+    }
+    .navbar-inner {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 20px 24px;
+    }
+    @media (min-width: 1024px) {
+      .navbar-inner {
+        display: grid; grid-template-columns: 1fr auto 1fr;
+        padding: 20px 32px;
+      }
+    }
+    .navbar-logo {
+      font-family: "General Sans", system-ui, sans-serif;
+      font-size: 24px; font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+    .navbar-logo span { color: var(--wa-green); }
+    .navbar-links {
+      display: none; align-items: center; justify-content: center; gap: 28px;
+      font-size: 15px;
+    }
+    @media (min-width: 1024px) { .navbar-links { display: flex; } }
+    .navbar-auth {
+      display: flex; align-items: center; justify-content: flex-end; gap: 12px;
+    }
+    .navbar-auth .outline-btn,
+    .navbar-auth .brand-btn { display: none; }
+    @media (min-width: 640px) {
+      .navbar-auth .outline-btn,
+      .navbar-auth .brand-btn { display: inline-flex; }
+    }
+    .navbar-divider {
+      height: 1px; margin-top: 3px;
+      background: linear-gradient(to right, transparent, hsl(var(--foreground) / 0.2), transparent);
+    }
+    .hamburger { display: block; padding: 4px; }
+    @media (min-width: 1024px) { .hamburger { display: none; } }
+
+    .mobile-menu {
+      display: none;
+      flex-direction: column; gap: 16px;
+      padding: 20px 24px;
+      border-bottom: 1px solid hsl(var(--border));
+      font-size: 16px;
+    }
+    .mobile-menu.open { display: flex; }
+    .mobile-menu-btns { display: flex; flex-direction: column; gap: 12px; margin-top: 4px; }
+    .mobile-menu-btns .outline-btn,
+    .mobile-menu-btns .brand-btn { justify-content: center; padding: 14px; }
+
+    /* ═══════════════════════════════════════════════════════════
+       HERO
+       ═══════════════════════════════════════════════════════════ */
+    .hero {
+      position: relative; min-height: 100vh;
+      display: flex; flex-direction: column; overflow: visible;
+    }
+    .hero-content {
+      flex: 1; display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      text-align: center; padding: 56px 24px;
+      position: relative; z-index: 10;
+    }
+    .hero .blur-shape {
+      position: absolute; top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 1; pointer-events: none; border-radius: 50%;
+    }
+    .hero-badge {
+      display: flex; align-items: center; gap: 10px;
+      margin-bottom: 20px;
+    }
+    .hero-badge .dot {
+      width: 7px; height: 7px; border-radius: 50%;
+      background: var(--wa-green); display: inline-block;
+    }
+    .hero-badge span:last-child {
+      font-size: 13px; letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: hsl(var(--foreground) / 0.7);
+      white-space: nowrap;
+    }
+    .hero h1 {
+      font-family: "General Sans", system-ui, sans-serif;
+      font-weight: 400;
+      font-size: clamp(36px, 5.4vw, 80px);
+      line-height: 1.06; letter-spacing: -0.02em;
+      max-width: 17ch; text-wrap: balance;
+    }
+    .hero-sub {
+      font-size: 18px; line-height: 28px;
+      margin-top: 16px; max-width: 560px;
+      color: hsl(var(--hero-sub));
+    }
+    .hero-cta-row {
+      display: flex; flex-wrap: wrap; gap: 12px;
+      justify-content: center; margin-top: 26px;
+    }
+    .hero-wa-icon {
+      width: 120px; height: 120px;
+      margin-top: 40px;
+      opacity: 0.15;
+    }
+
+    /* ── Integrations bar ─────────────────────────────── */
+    .integrations-bar {
+      padding: 0 24px 40px;
+      position: relative; z-index: 10;
+    }
+    .integrations-bar-inner {
+      max-width: 800px; margin: 0 auto;
+      display: flex; flex-direction: column;
+      align-items: center; gap: 12px;
+    }
+    @media (min-width: 640px) {
+      .integrations-bar-inner {
+        flex-direction: row; justify-content: center; gap: 32px;
+      }
+    }
+    .integrations-bar-label {
+      font-size: 14px; font-weight: 500;
+      color: hsl(var(--foreground) / 0.72);
+      white-space: nowrap;
+    }
+    .integrations-bar-logos {
+      display: flex; align-items: center; gap: 20px; flex-wrap: wrap; justify-content: center;
+    }
+    .integrations-bar-logos .int-logo {
+      display: flex; align-items: center; gap: 6px;
+      font-size: 14px; color: hsl(var(--foreground) / 0.65);
+      white-space: nowrap;
+    }
+    .integrations-bar-logos .int-logo svg { width: 20px; height: 20px; }
+
+    /* ═══════════════════════════════════════════════════════════
+       FEATURES
+       ═══════════════════════════════════════════════════════════ */
+    .feature-card {
+      border: 1px solid hsl(var(--border));
+      border-radius: 16px; padding: 28px;
+      display: flex; flex-direction: column;
+    }
+    .feature-icon {
+      width: 48px; height: 48px; border-radius: 13px;
+      background: hsl(258 34% 10%);
+      border: 1px solid hsl(var(--border));
+      display: flex; align-items: center; justify-content: center;
+      color: #25D366; margin-bottom: 16px;
+    }
+    .feature-icon svg { width: 24px; height: 24px; }
+    .feature-card h3 {
+      font-family: "General Sans", system-ui, sans-serif;
+      font-size: 19px; font-weight: 600;
+      margin-bottom: 8px;
+    }
+    .feature-card p {
+      font-size: 14px; line-height: 24px;
+      color: hsl(var(--foreground) / 0.72);
+    }
+    .feature-card .feature-list {
+      margin-top: 16px; display: flex; flex-direction: column; gap: 10px;
+    }
+    .feature-card .feature-list li {
+      display: flex; align-items: flex-start; gap: 10px;
+      font-size: 14px; color: hsl(var(--foreground) / 0.85);
+    }
+    .feature-card .feature-list li svg {
+      width: 17px; height: 17px; flex-shrink: 0; margin-top: 2px;
+    }
+
+    /* ═══════════════════════════════════════════════════════════
+       INTEGRATIONS
+       ═══════════════════════════════════════════════════════════ */
+    .integration-card {
+      border: 1px solid hsl(var(--border));
+      border-radius: 16px; padding: 24px;
+      display: flex; flex-direction: column; align-items: center;
+      text-align: center;
+      transition: border-color 0.3s ease, box-shadow 0.3s ease, transform 0.2s ease;
+    }
+    .integration-card:hover {
+      border-color: hsl(var(--foreground) / 0.15);
+      box-shadow: 0 0 30px -8px hsl(258 80% 55% / 0.2);
+      transform: translateY(-2px);
+    }
+    .integration-icon {
+      width: 56px; height: 56px; border-radius: 14px;
+      background: hsl(258 30% 10%);
+      border: 1px solid hsl(var(--border));
+      display: flex; align-items: center; justify-content: center;
+      margin-bottom: 14px; font-size: 28px;
+    }
+    .integration-card h3 {
+      font-family: "General Sans", system-ui, sans-serif;
+      font-size: 16px; font-weight: 600;
+      margin-bottom: 4px;
+    }
+    .integration-card p {
+      font-size: 13px; line-height: 20px;
+      color: hsl(var(--muted));
+    }
+
+    /* ═══════════════════════════════════════════════════════════
+       HOW IT WORKS
+       ═══════════════════════════════════════════════════════════ */
+    .steps-grid {
+      display: grid; grid-template-columns: 1fr; gap: 36px;
+      max-width: 1000px; margin: 0 auto;
+    }
+    @media (min-width: 768px) {
+      .steps-grid { grid-template-columns: repeat(3, 1fr); gap: 24px; }
+    }
+    .step-card {
+      text-align: center; padding: 32px 20px;
+    }
+    .step-number {
+      width: 48px; height: 48px; border-radius: 50%;
+      background: linear-gradient(95deg, #f5a623, #ec4899, #a855f7, #4f7df6);
+      display: flex; align-items: center; justify-content: center;
+      font-family: "General Sans", system-ui, sans-serif;
+      font-weight: 700; font-size: 18px; color: #fff;
+      margin: 0 auto 18px;
+    }
+    .step-card h3 {
+      font-family: "General Sans", system-ui, sans-serif;
+      font-size: 20px; font-weight: 600;
+      color: var(--lime); margin-bottom: 10px;
+    }
+    .step-card p {
+      font-size: 15px; line-height: 26px;
+      color: hsl(var(--foreground) / 0.72);
+      max-width: 300px; margin: 0 auto;
+    }
+
+    /* ═══════════════════════════════════════════════════════════
+       PRICING
+       ═══════════════════════════════════════════════════════════ */
+    .plan-card {
+      border-radius: 16px; padding: 28px;
+      display: flex; flex-direction: column;
+      position: relative;
+    }
+    .plan-card.highlight {
+      border: 1px solid hsl(282 80% 62% / 0.6) !important;
+      box-shadow: 0 0 44px -10px hsl(282 80% 55% / 0.4);
+    }
+    .plan-badge {
+      position: absolute; top: -11px; left: 50%; transform: translateX(-50%);
+      background: linear-gradient(90deg, #7c3aed, #a855f7);
+      border-radius: 99px; padding: 3px 14px;
+      font-size: 11.5px; font-weight: 700;
+      color: #fff; white-space: nowrap;
+    }
+    .plan-name {
+      font-family: "General Sans", system-ui, sans-serif;
+      font-size: 22px; font-weight: 600;
+    }
+    .plan-price {
+      margin-top: 12px; display: flex; align-items: flex-end; gap: 6px;
+    }
+    .plan-price .amount {
+      font-family: "General Sans", system-ui, sans-serif;
+      font-size: 40px; font-weight: 600; line-height: 1;
+    }
+    .plan-price .suffix {
+      font-size: 15px; padding-bottom: 4px;
+      color: hsl(var(--muted));
+    }
+    .plan-desc {
+      margin-top: 4px; font-size: 13px;
+      color: hsl(var(--muted));
+    }
+    .plan-info {
+      margin-top: 16px; border-radius: 10px; padding: 10px 16px;
+      background: hsl(258 28% 10%);
+      border: 1px solid hsl(var(--border));
+      font-size: 12px; color: hsl(var(--foreground) / 0.8);
+      text-align: center; line-height: 1.6;
+    }
+    .plan-cta {
+      margin-top: 16px; text-align: center;
+      border-radius: 999px; padding: 14px;
+      font-weight: 500; font-size: 14px;
+    }
+    .plan-features {
+      margin-top: 20px; display: flex; flex-direction: column; gap: 12px;
+    }
+    .plan-features li {
+      display: flex; align-items: flex-start; gap: 10px;
+      font-size: 13.5px; line-height: 20px;
+      color: hsl(var(--foreground) / 0.85);
+    }
+    .plan-features li svg { width: 18px; height: 18px; flex-shrink: 0; margin-top: 1px; }
+
+    /* ═══════════════════════════════════════════════════════════
+       TESTIMONIALS
+       ═══════════════════════════════════════════════════════════ */
+    .testimonial-card {
+      border: 1px solid hsl(var(--border));
+      border-radius: 16px; padding: 28px;
+      display: flex; flex-direction: column;
+    }
+    .testimonial-stars { display: flex; gap: 2px; }
+    .testimonial-stars svg { width: 15px; height: 15px; }
+    .testimonial-quote {
+      margin-top: 18px; font-size: 15.5px;
+      line-height: 26px; flex: 1;
+      color: hsl(var(--foreground) / 0.9);
+    }
+    .testimonial-author {
+      display: flex; align-items: center; gap: 12px; margin-top: 24px;
+    }
+    .testimonial-avatar {
+      width: 44px; height: 44px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-family: "General Sans", system-ui, sans-serif;
+      font-weight: 600; font-size: 18px; color: #fff;
+      flex-shrink: 0;
+    }
+    .testimonial-name {
+      font-family: "General Sans", system-ui, sans-serif;
+      font-weight: 500; font-size: 15px;
+    }
+    .testimonial-role {
+      font-size: 13px; color: hsl(var(--muted));
+    }
+
+    /* ═══════════════════════════════════════════════════════════
+       CLOSING CTA
+       ═══════════════════════════════════════════════════════════ */
+    .cta-section {
+      position: relative; overflow: hidden;
+      border-radius: 24px;
+      border: 1px solid hsl(282 50% 30% / 0.45);
+      padding: clamp(48px, 7vw, 96px) 24px;
+      background: radial-gradient(120% 140% at 50% 0%, hsl(272 55% 16%) 0%, hsl(260 70% 6%) 55%, hsl(var(--background)) 100%);
+      text-align: center;
+    }
+    .cta-section .cta-glow {
+      position: absolute; pointer-events: none;
+      width: 520px; height: 320px; top: -120px; left: 50%;
+      transform: translateX(-50%); border-radius: 50%;
+      background: radial-gradient(circle, hsl(282 80% 55% / 0.35) 0%, transparent 70%);
+      filter: blur(40px);
+    }
+    .cta-section h2 {
+      font-family: "General Sans", system-ui, sans-serif;
+      font-weight: 400;
+      font-size: clamp(34px, 5.5vw, 68px);
+      line-height: 1.05; letter-spacing: -0.022em;
+      max-width: 16ch; margin: 0 auto;
+    }
+    .cta-section p {
+      margin-top: 20px; font-size: 17px;
+      line-height: 28px; max-width: 40ch;
+      margin-left: auto; margin-right: auto;
+      color: hsl(var(--hero-sub)); opacity: 0.85;
+    }
+    .cta-btns {
+      margin-top: 36px;
+      display: flex; flex-direction: column; gap: 12px;
+      justify-content: center; align-items: center;
+    }
+    @media (min-width: 640px) {
+      .cta-btns { flex-direction: row; }
+    }
+
+    /* ═══════════════════════════════════════════════════════════
+       FOOTER
+       ═══════════════════════════════════════════════════════════ */
+    .site-footer {
+      border-top: 1px solid hsl(var(--border));
+    }
+    .footer-grid {
+      display: grid; gap: 48px;
+      padding: 64px 0;
+    }
+    @media (min-width: 768px) {
+      .footer-grid { grid-template-columns: 1.4fr 1fr 1fr 1fr; }
+    }
+    .footer-col-title {
+      font-family: "General Sans", system-ui, sans-serif;
+      font-weight: 500; font-size: 14px;
+      margin-bottom: 16px;
+    }
+    .footer-col-links { display: flex; flex-direction: column; gap: 10px; }
+    .footer-col-links a {
+      font-size: 14px; transition: color 0.25s ease;
+      color: hsl(var(--foreground) / 0.6);
+    }
+    .footer-col-links a:hover { color: hsl(var(--foreground)); }
+    .footer-bottom {
+      border-top: 1px solid hsl(var(--border));
+      padding: 24px 0;
+      display: flex; flex-direction: column; gap: 12px;
+      align-items: center; justify-content: space-between;
+    }
+    @media (min-width: 640px) {
+      .footer-bottom { flex-direction: row; }
+    }
+    .footer-bottom span { font-size: 13px; color: hsl(var(--muted)); }
+    .footer-bottom-links { display: flex; gap: 24px; }
+    .footer-bottom-links a {
+      font-size: 13px; color: hsl(var(--muted));
+      transition: color 0.25s ease;
+    }
+    .footer-bottom-links a:hover { color: hsl(var(--foreground)); }
+
+    /* ═══════════════════════════════════════════════════════════
+       SECTION HEADERS
+       ═══════════════════════════════════════════════════════════ */
+    .section-label {
+      font-size: 12px; font-weight: 500;
+      letter-spacing: 0.22em; text-transform: uppercase;
+      color: hsl(var(--muted)); margin-bottom: 16px;
+    }
+    .section-title {
+      font-family: "General Sans", system-ui, sans-serif;
+      font-weight: 500;
+      font-size: clamp(30px, 4.4vw, 52px);
+      line-height: 1.08; letter-spacing: -0.02em;
+    }
+    .section-subtitle {
+      margin-top: 16px; font-size: 16px;
+      line-height: 28px; color: hsl(var(--muted));
+      max-width: 600px;
+    }
+
+    /* Reduced motion */
+    @media (prefers-reduced-motion: reduce) {
+      .blur-shape, .firefly-dot, .float-anim { animation: none !important; }
+      .rise { animation: none !important; opacity: 1 !important; transform: none !important; }
+      .card-reveal { opacity: 1 !important; transform: none !important; transition: none !important; }
+    }
+
+    /* ═══════════════════════════════════════════════════════════
+       WHATSAPP CHAT MOCKUP
+       ═══════════════════════════════════════════════════════════ */
+    .chat-mockup {
+      max-width: 340px;
+      margin: 0 auto;
+      border-radius: 18px;
+      overflow: hidden;
+      border: 1px solid hsl(var(--border));
+      box-shadow: 0 30px 70px -24px hsl(260 90% 1% / 0.9);
+    }
+    .chat-header {
+      background: hsl(258 32% 9%);
+      padding: 12px 16px;
+      display: flex; align-items: center; gap: 10px;
+      border-bottom: 1px solid hsl(var(--border-soft));
+    }
+    .chat-header-avatar {
+      width: 36px; height: 36px; border-radius: 50%;
+      background: linear-gradient(140deg, #25D366, #128C7E);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .chat-header-info { flex: 1; }
+    .chat-header-name {
+      font-family: "General Sans", system-ui, sans-serif;
+      font-size: 14px; font-weight: 600;
+    }
+    .chat-header-status {
+      font-size: 11px; color: #25D366;
+    }
+    .chat-body {
+      background: hsl(260 50% 4%);
+      padding: 16px;
+      display: flex; flex-direction: column; gap: 8px;
+      min-height: 260px;
+    }
+    .chat-bubble {
+      max-width: 80%;
+      padding: 10px 14px;
+      border-radius: 14px;
+      font-size: 13px; line-height: 1.5;
+    }
+    .chat-bubble.incoming {
+      background: hsl(258 32% 12%);
+      border: 1px solid hsl(var(--border-soft));
+      align-self: flex-start;
+      border-bottom-left-radius: 4px;
+    }
+    .chat-bubble.outgoing {
+      background: hsl(152 50% 14%);
+      border: 1px solid hsl(152 40% 20%);
+      align-self: flex-end;
+      border-bottom-right-radius: 4px;
+    }
+    .chat-bubble .time {
+      display: block; text-align: right;
+      font-size: 10px; color: hsl(var(--muted)); margin-top: 4px;
+    }
+    .chat-typing {
+      align-self: flex-start;
+      display: flex; gap: 4px; padding: 10px 18px;
+      background: hsl(258 32% 12%);
+      border: 1px solid hsl(var(--border-soft));
+      border-radius: 14px; border-bottom-left-radius: 4px;
+    }
+    .chat-typing span {
+      width: 6px; height: 6px; border-radius: 50%;
+      background: hsl(var(--muted)); display: block;
+      animation: typing 1.4s ease-in-out infinite;
+    }
+    .chat-typing span:nth-child(2) { animation-delay: 0.2s; }
+    .chat-typing span:nth-child(3) { animation-delay: 0.4s; }
+    @keyframes typing {
+      0%, 60%, 100% { transform: translateY(0); opacity: 0.4; }
+      30% { transform: translateY(-4px); opacity: 1; }
+    }
+
+    /* ═══════════════════════════════════════════════════════════
+       HOW IT WORKS LAYOUT
+       ═══════════════════════════════════════════════════════════ */
+    .how-grid {
+      display: grid; grid-template-columns: 1fr; gap: 48px;
+      align-items: center;
+    }
+    @media (min-width: 1024px) {
+      .how-grid { grid-template-columns: 1fr 1fr; gap: 80px; }
+    }
+
+    /* Connector line between steps */
+    .steps-connector {
+      display: none;
+    }
+    @media (min-width: 768px) {
+      .steps-connector {
+        display: block;
+        position: relative;
+      }
+      .steps-connector::before {
+        content: '';
+        position: absolute;
+        top: 24px; left: calc(50% / 3 + 24px); right: calc(50% / 3 + 24px);
+        height: 1px;
+        background: linear-gradient(to right, transparent, hsl(var(--border)), transparent);
+      }
+    }
+  </style>
 </head>
 <body>
-    <div class="container">
-        <h1>s1r.com.ar</h1>
-        <p>🤖 Agentes de WhatsApp para tu negocio</p>
-        <p style="color: #999; font-size: 1em;">Automatiza conversaciones, califica leads y vende más.</p>
-        <div class="badge">En desarrollo</div>
-        <footer>
-            <p>Próximamente más información</p>
-        </footer>
+
+  <!-- ══════════════════════════════════════════════════════════
+       NAVBAR
+       ══════════════════════════════════════════════════════════ -->
+  <header class="navbar" id="navbar">
+    <nav class="navbar-inner">
+      <a href="/" class="navbar-logo" aria-label="S1RAI WhatsApp">
+        S1R<span>AI</span>
+      </a>
+
+      <div class="navbar-links font-body">
+        <a href="#funcionalidades" class="nav-link">Producto</a>
+        <a href="#integraciones" class="nav-link">Integraciones</a>
+        <a href="#precios" class="nav-link">Precios</a>
+        <a href="#contacto" class="nav-link">Contacto</a>
+      </div>
+
+      <div class="navbar-auth">
+        <a href="https://app.s1rai.com.ar/signin" class="outline-btn font-body" style="padding:10px 20px;font-size:14px;">Iniciar sesión</a>
+        <a href="#contacto" class="brand-btn font-body" style="font-size:14px;">Contactar ventas</a>
+        <button class="hamburger" id="hamburgerBtn" aria-label="Menú">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" style="width:22px;height:22px;" id="hamburgerIcon">
+            <path d="M3 6h18"/><path d="M3 12h18"/><path d="M3 18h18"/>
+          </svg>
+        </button>
+      </div>
+    </nav>
+    <div class="navbar-divider"></div>
+
+    <div class="mobile-menu font-body" id="mobileMenu">
+      <a href="#funcionalidades" class="nav-link">Producto</a>
+      <a href="#integraciones" class="nav-link">Integraciones</a>
+      <a href="#precios" class="nav-link">Precios</a>
+      <a href="#contacto" class="nav-link">Contacto</a>
+      <div class="mobile-menu-btns">
+        <a href="https://app.s1rai.com.ar/signin" class="outline-btn font-body">Iniciar sesión</a>
+        <a href="#contacto" class="brand-btn font-body">Contactar ventas</a>
+      </div>
     </div>
+  </header>
+
+  <!-- ══════════════════════════════════════════════════════════
+       HERO
+       ══════════════════════════════════════════════════════════ -->
+  <section class="hero hero-fallback">
+    <div class="blur-shape"></div>
+
+    <div class="hero-content">
+      <!-- Badge -->
+      <div class="hero-badge rise" style="--rise-delay:0.05s;">
+        <span class="dot firefly-dot"></span>
+        <span class="font-body">Automatizá tu WhatsApp con IA</span>
+      </div>
+
+      <!-- Headline -->
+      <h1 class="rise" style="--rise-delay:0.15s;">
+        Vendé más con un agente que <span class="accent-text">nunca duerme</span>
+      </h1>
+
+      <!-- Subtitle -->
+      <p class="hero-sub font-body rise" style="--rise-delay:0.35s;">
+        Un agente de WhatsApp con IA que atiende consultas, califica leads, envía catálogos y cierra ventas. 24 horas, 7 días. Sin código.
+      </p>
+
+      <!-- CTAs -->
+      <div class="hero-cta-row rise" style="--rise-delay:0.55s;">
+        <a href="#contacto" class="wa-btn font-body">
+          <svg viewBox="0 0 24 24" fill="currentColor" style="width:18px;height:18px;">
+            <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+          </svg>
+          Contactar ventas
+        </a>
+        <a href="#funcionalidades" class="glow-btn font-body">
+          <svg viewBox="0 0 24 24" fill="currentColor" style="width:15px;height:15px;"><path d="M8 5v14l11-7z"/></svg>
+          Ver cómo funciona
+        </a>
+      </div>
+
+      <!-- WhatsApp icon floating -->
+      <div class="float-anim rise" style="--rise-delay:0.75s;">
+        <svg class="hero-wa-icon" viewBox="0 0 24 24" fill="hsl(152 60% 40% / 0.5)">
+          <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+        </svg>
+      </div>
+    </div>
+
+    <!-- Integrations bar -->
+    <div class="integrations-bar">
+      <div class="integrations-bar-inner">
+        <span class="integrations-bar-label font-body">Integralo con</span>
+        <div class="integrations-bar-logos font-body">
+          <span class="int-logo">
+            <svg viewBox="0 0 24 24" fill="#96bf48"><path d="M15.337 3.217c-.063.025-.137.063-.2.1-.062.038-.137.088-.2.138a2.5 2.5 0 00-.375.35c-.113.125-.2.263-.275.413-.075.15-.125.313-.163.487a1.5 1.5 0 00.038.988c.075.2.2.375.35.513.15.138.338.25.55.325.213.075.45.113.713.113.15 0 .3-.013.45-.038s.3-.063.438-.113c.138-.05.275-.1.4-.163.125-.063.238-.138.338-.213l-.163-.25a2.3 2.3 0 01-.55.313c-.2.075-.425.113-.675.113-.225 0-.425-.038-.6-.1a1.4 1.4 0 01-.438-.275 1.2 1.2 0 01-.275-.413 1.4 1.4 0 01-.1-.525c0-.2.038-.375.1-.538.063-.163.15-.3.263-.413.113-.113.25-.2.4-.263.15-.063.313-.1.488-.1.15 0 .288.025.413.063.125.038.238.088.338.15l.15-.25c-.113-.075-.25-.138-.4-.188-.15-.05-.313-.075-.5-.075-.213 0-.4.038-.575.1z"/><path d="M20.5 7.28l-1.963-.338-.875-1.712s-.025-.05-.063-.075L16.787 12l3.45-.75L20.5 7.28z" fill="#5e8e3e"/><path d="M17.6 5.155c-.038-.013-.075-.013-.1 0l-.812 3.97 1.575-.344-.663-3.626z" fill="#fff"/><path d="M13.85 8.655l-.75 2.275s-.325-.175-.713-.175c-1.15 0-1.212.725-1.212.9 0 .988 1.288 1.363 1.288 2.675 0 1.325-.838 2.175-1.975 2.175-1.363 0-2.063-.85-2.063-.85l.363-1.213s.713.613 1.325.613c.4 0 .563-.313.563-.55 0-1.288-1.063-1.35-1.063-2.525 0-1.3.963-2.55 2.888-2.55.738 0 1.1.213 1.1.213l.25.012z"/></svg>
+            Shopify
+          </span>
+          <span class="int-logo">
+            <svg viewBox="0 0 24 24" fill="#7B68EE"><circle cx="12" cy="12" r="10"/><path d="M7 12l3 3 7-7" stroke="#fff" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            HubSpot
+          </span>
+          <span class="int-logo">
+            <svg viewBox="0 0 24 24" fill="#714B67"><rect x="2" y="2" width="20" height="20" rx="4"/><text x="12" y="16" font-size="10" fill="#fff" text-anchor="middle" font-weight="bold">O</text></svg>
+            Odoo
+          </span>
+          <span class="int-logo">+ 5 más</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════════
+       FEATURES
+       ══════════════════════════════════════════════════════════ -->
+  <section id="funcionalidades" class="section-padding">
+    <div class="container">
+      <div class="text-center" style="max-width:640px;margin:0 auto 56px;">
+        <h2 class="section-title font-display">
+          Tu equipo de ventas en <span class="accent-text">WhatsApp</span>
+        </h2>
+        <p class="section-subtitle mx-auto">
+          Agentes con IA que entienden a tus clientes, responden al instante y nunca pierden una oportunidad de venta.
+        </p>
+      </div>
+
+      <div class="grid-4" style="max-width:1200px;margin:0 auto;">
+        <!-- Card 1 -->
+        <div class="card-reveal card-bg feature-card">
+          <div class="feature-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/>
+            </svg>
+          </div>
+          <h3>Atención 24/7</h3>
+          <p>Responde consultas al instante, a cualquier hora del día. Tu negocio nunca cierra.</p>
+          <ul class="feature-list">
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="#34d399" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg><span>Respuestas en segundos</span></li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="#34d399" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg><span>Sin tiempos de espera</span></li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="#34d399" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg><span>Fines de semana y feriados</span></li>
+          </ul>
+        </div>
+
+        <!-- Card 2 -->
+        <div class="card-reveal card-bg feature-card" style="transition-delay:80ms;">
+          <div class="feature-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M16 21v-2a4 4 0 00-4-4H6a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/>
+            </svg>
+          </div>
+          <h3>Calificación de leads</h3>
+          <p>Filtra y califica prospectos automáticamente. Solo te llegan los que están listos para comprar.</p>
+          <ul class="feature-list">
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="#34d399" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg><span>Preguntas inteligentes</span></li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="#34d399" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg><span>Scoring automático</span></li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="#34d399" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg><span>Derivación a ventas</span></li>
+          </ul>
+        </div>
+
+        <!-- Card 3 -->
+        <div class="card-reveal card-bg feature-card" style="transition-delay:160ms;">
+          <div class="feature-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8"/><path d="M12 17v4"/><path d="M7 8h2M7 12h6"/>
+            </svg>
+          </div>
+          <h3>Catálogo inteligente</h3>
+          <p>Envía productos, precios y disponibilidad directo por WhatsApp con fotos y links de pago.</p>
+          <ul class="feature-list">
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="#34d399" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg><span>Fotos de productos</span></li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="#34d399" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg><span>Links de pago</span></li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="#34d399" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg><span>Stock en tiempo real</span></li>
+          </ul>
+        </div>
+
+        <!-- Card 4 -->
+        <div class="card-reveal card-bg feature-card" style="transition-delay:240ms;">
+          <div class="feature-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
+            </svg>
+          </div>
+          <h3>Seguimiento automático</h3>
+          <p>Follow-up inteligente, recordatorios de carritos abandonados y campañas de re-engagement.</p>
+          <ul class="feature-list">
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="#34d399" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg><span>Carritos abandonados</span></li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="#34d399" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg><span>Recordatorios programados</span></li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="#34d399" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg><span>Campañas de re-engagement</span></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════════
+       HOW IT WORKS
+       ══════════════════════════════════════════════════════════ -->
+  <section class="section-padding" style="padding-top:0;">
+    <div class="container">
+      <div class="how-grid" style="max-width:1180px;margin:0 auto;">
+        <!-- Chat mockup -->
+        <div class="card-reveal">
+          <p class="font-display" style="font-size:19px;font-weight:500;line-height:1.4;margin-bottom:22px;max-width:420px;">
+            <span style="color:var(--wa-green);">Mirá</span> cómo tu agente atiende por WhatsApp
+          </p>
+          <div class="chat-mockup">
+            <div class="chat-header">
+              <div class="chat-header-avatar">
+                <svg viewBox="0 0 24 24" fill="#fff" style="width:18px;height:18px;"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+              </div>
+              <div class="chat-header-info">
+                <div class="chat-header-name">Agente S1RAI</div>
+                <div class="chat-header-status">● En línea</div>
+              </div>
+            </div>
+            <div class="chat-body">
+              <div class="chat-bubble incoming">
+                ¡Hola! 👋 Soy el asistente de <b>Tu Tienda</b>. ¿En qué puedo ayudarte?
+                <span class="time">14:02</span>
+              </div>
+              <div class="chat-bubble outgoing">
+                Hola, quiero ver las zapatillas que tienen
+                <span class="time">14:02</span>
+              </div>
+              <div class="chat-bubble incoming">
+                ¡Perfecto! Te muestro las más vendidas 🔥<br><br>
+                👟 <b>Nike Air Max 90</b> — $89.990<br>
+                👟 <b>Adidas Ultraboost</b> — $94.990<br>
+                👟 <b>New Balance 574</b> — $74.990<br><br>
+                ¿Querés ver alguna en detalle o te paso el link de pago?
+                <span class="time">14:02</span>
+              </div>
+              <div class="chat-bubble outgoing">
+                Las Nike! Talle 42
+                <span class="time">14:03</span>
+              </div>
+              <div class="chat-typing">
+                <span></span><span></span><span></span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Steps -->
+        <div class="card-reveal" style="transition-delay:120ms;">
+          <div style="display:flex;flex-direction:column;gap:36px;">
+            <div style="display:flex;align-items:flex-start;gap:16px;">
+              <span style="width:46px;height:46px;border-radius:13px;background:hsl(258 34% 10%);border:1px solid hsl(var(--border));display:flex;align-items:center;justify-content:center;flex-shrink:0;color:#25D366;">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="width:24px;height:24px;"><path d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z"/></svg>
+              </span>
+              <div>
+                <h3 class="font-display" style="font-size:19px;font-weight:600;color:var(--lime);">Conectá tu WhatsApp</h3>
+                <p class="font-body" style="font-size:15px;line-height:26px;color:hsl(var(--foreground)/.72);max-width:420px;margin-top:6px;">Vinculá tu número de WhatsApp Business en minutos. Sin instalar nada.</p>
+              </div>
+            </div>
+
+            <div style="display:flex;align-items:flex-start;gap:16px;">
+              <span style="width:46px;height:46px;border-radius:13px;background:hsl(258 34% 10%);border:1px solid hsl(var(--border));display:flex;align-items:center;justify-content:center;flex-shrink:0;color:#25D366;">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="width:24px;height:24px;"><rect x="3" y="9.5" width="5" height="5" rx="1.2"/><rect x="15" y="4" width="5" height="5" rx="1.2"/><rect x="15" y="15" width="5" height="5" rx="1.2"/><path d="M8 12h3.5M11.5 12V6.5H15M11.5 12v5.5H15"/></svg>
+              </span>
+              <div>
+                <h3 class="font-display" style="font-size:19px;font-weight:600;color:var(--lime);">Configurá tu agente</h3>
+                <p class="font-body" style="font-size:15px;line-height:26px;color:hsl(var(--foreground)/.72);max-width:420px;margin-top:6px;">Definí el tono, las reglas de negocio, el catálogo y las integraciones que necesitás.</p>
+              </div>
+            </div>
+
+            <div style="display:flex;align-items:flex-start;gap:16px;">
+              <span style="width:46px;height:46px;border-radius:13px;background:hsl(258 34% 10%);border:1px solid hsl(var(--border));display:flex;align-items:center;justify-content:center;flex-shrink:0;color:#25D366;">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="width:24px;height:24px;"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+              </span>
+              <div>
+                <h3 class="font-display" style="font-size:19px;font-weight:600;color:var(--lime);">Empezá a vender</h3>
+                <p class="font-body" style="font-size:15px;line-height:26px;color:hsl(var(--foreground)/.72);max-width:420px;margin-top:6px;">Tu agente atiende, califica leads y cierra ventas mientras vos te enfocás en crecer.</p>
+              </div>
+            </div>
+          </div>
+
+          <a href="#contacto" class="brand-btn font-body" style="padding:14px 30px;margin-top:38px;font-size:15px;">
+            Contactar ventas
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════════
+       INTEGRATIONS
+       ══════════════════════════════════════════════════════════ -->
+  <section id="integraciones" class="section-padding" style="padding-top:0;">
+    <div class="container">
+      <div class="text-center" style="max-width:640px;margin:0 auto 56px;">
+        <p class="section-label font-body">Integraciones</p>
+        <h2 class="section-title font-display">
+          Conectá con las herramientas que <span class="accent-text">ya usás</span>
+        </h2>
+        <p class="section-subtitle mx-auto">
+          Tu agente de WhatsApp se integra con tu stack actual. Sincronizá productos, pedidos, leads y más.
+        </p>
+      </div>
+
+      <div class="grid-4" style="max-width:1200px;margin:0 auto;">
+        <!-- Shopify -->
+        <div class="card-reveal card-bg integration-card">
+          <div class="integration-icon" style="color:#96bf48;">
+            <svg viewBox="0 0 24 24" fill="currentColor" style="width:28px;height:28px;"><path d="M15.34 3.28c-.06.02-.13.06-.19.1-.06.04-.13.08-.19.13a2.5 2.5 0 00-.38.35c-.11.12-.19.26-.27.41-.08.15-.13.31-.16.49-.04.17-.04.35.04.53.03.13.08.25.15.35.08.1.17.19.28.26.11.07.24.12.38.15.14.03.3.05.47.05h.1c.08 0 .16-.01.24-.02L15.34 3.28zM20.5 7.28l-1.96-.34-.88-1.71c-.02-.03-.04-.05-.06-.08L16.79 12l3.45-.75L20.5 7.28zM17.6 5.16l-.1-.01-.81 3.97 1.58-.34-.67-3.62zM13.85 8.66l-.75 2.27s-.33-.18-.71-.18c-1.15 0-1.21.73-1.21.9 0 .99 1.29 1.36 1.29 2.68 0 1.32-.84 2.17-1.98 2.17-1.36 0-2.06-.85-2.06-.85l.36-1.21s.71.61 1.33.61c.4 0 .56-.31.56-.55 0-1.29-1.06-1.35-1.06-2.53 0-1.3.96-2.55 2.89-2.55.74 0 1.1.21 1.1.21l.24.03z"/></svg>
+          </div>
+          <h3>Shopify</h3>
+          <p>Sincronizá productos, precios y pedidos directamente desde tu tienda.</p>
+        </div>
+
+        <!-- WooCommerce -->
+        <div class="card-reveal card-bg integration-card" style="transition-delay:60ms;">
+          <div class="integration-icon" style="color:#9B5C8F;">
+            <svg viewBox="0 0 24 24" fill="currentColor" style="width:28px;height:28px;"><path d="M2 4a2 2 0 00-2 2v9a2 2 0 002 2h1.2l1.3 3.5a.5.5 0 00.94-.02L6.9 17H17.1l1.46 3.48a.5.5 0 00.94.02L20.8 17H22a2 2 0 002-2V6a2 2 0 00-2-2H2zm4.5 10c-1.1 0-2-.5-2.7-1.5l1-.8c.4.6 1 1 1.7 1 .5 0 .9-.3.9-.7 0-1.2-3.4-1-3.4-3.5 0-1.2 1-2 2.3-2 .9 0 1.7.4 2.2 1l-.9.9c-.3-.4-.8-.6-1.3-.6-.5 0-.8.2-.8.6 0 1.1 3.4.9 3.4 3.4 0 1.3-1 2.2-2.4 2.2zm6-5.4c-.6 0-1 .5-1 1.2v3.4H10V7.4h1.5v.7c.4-.5 1-.8 1.7-.8 1.3 0 2.3 1 2.3 2.6v3.3h-1.5V10c0-.8-.4-1.4-1.1-1.4h-.4z"/></svg>
+          </div>
+          <h3>WooCommerce</h3>
+          <p>Conectá tu tienda WordPress y gestioná ventas por WhatsApp.</p>
+        </div>
+
+        <!-- Odoo -->
+        <div class="card-reveal card-bg integration-card" style="transition-delay:120ms;">
+          <div class="integration-icon" style="color:#714B67;">
+            <svg viewBox="0 0 24 24" fill="currentColor" style="width:28px;height:28px;"><rect x="2" y="2" width="20" height="20" rx="4"/><circle cx="8.5" cy="12" r="3" fill="hsl(258 35% 9%)"/><circle cx="15.5" cy="12" r="3" fill="hsl(258 35% 9%)"/></svg>
+          </div>
+          <h3>Odoo</h3>
+          <p>ERP completo: inventario, facturación, CRM y más en un solo lugar.</p>
+        </div>
+
+        <!-- HubSpot -->
+        <div class="card-reveal card-bg integration-card" style="transition-delay:180ms;">
+          <div class="integration-icon" style="color:#FF7A59;">
+            <svg viewBox="0 0 24 24" fill="currentColor" style="width:28px;height:28px;"><path d="M16.75 8.15V5.53a1.9 1.9 0 001.12-1.72 1.91 1.91 0 00-3.82 0c0 .75.44 1.39 1.07 1.7v2.64a5.23 5.23 0 00-2.7 1.35L5.88 4.67a1.74 1.74 0 00.06-.44A1.73 1.73 0 104.2 5.96a1.72 1.72 0 001-.35l6.4 4.77a5.29 5.29 0 00-.84 2.85 5.32 5.32 0 00.95 3.03l-1.96 2.38a1.52 1.52 0 00-.46-.08 1.54 1.54 0 101.54 1.54 1.5 1.5 0 00-.2-.72l1.91-2.33a5.26 5.26 0 008.21-4.35 5.24 5.24 0 00-3-4.55zm-1.63 7.93a3.02 3.02 0 110-6.04 3.02 3.02 0 010 6.04z"/></svg>
+          </div>
+          <h3>HubSpot</h3>
+          <p>CRM y marketing automation. Leads de WhatsApp directo a tu pipeline.</p>
+        </div>
+
+        <!-- Google Sheets -->
+        <div class="card-reveal card-bg integration-card" style="transition-delay:240ms;">
+          <div class="integration-icon" style="color:#34A853;">
+            <svg viewBox="0 0 24 24" fill="currentColor" style="width:28px;height:28px;"><path d="M19.5 6H16V3.5L19.5 6zM4 2v20h16V7h-5V2H4zm7 14H7v-2h4v2zm6-4H7v-2h10v2zm0-4H7V6h10v2z"/></svg>
+          </div>
+          <h3>Google Sheets</h3>
+          <p>Exportá conversaciones, leads y ventas a planillas en tiempo real.</p>
+        </div>
+
+        <!-- Mercado Libre -->
+        <div class="card-reveal card-bg integration-card" style="transition-delay:300ms;">
+          <div class="integration-icon" style="color:#FFE600;">
+            <svg viewBox="0 0 24 24" fill="currentColor" style="width:28px;height:28px;"><circle cx="12" cy="12" r="10"/><path d="M7 14c0-2.76 2.24-5 5-5s5 2.24 5 5" fill="none" stroke="hsl(258 35% 9%)" stroke-width="2" stroke-linecap="round"/><path d="M6 10.5S8 7 12 7s6 3.5 6 3.5" fill="none" stroke="hsl(258 35% 9%)" stroke-width="1.5" stroke-linecap="round"/></svg>
+          </div>
+          <h3>Mercado Libre</h3>
+          <p>Gestión de consultas de compradores directo desde el marketplace.</p>
+        </div>
+
+        <!-- Calendly -->
+        <div class="card-reveal card-bg integration-card" style="transition-delay:360ms;">
+          <div class="integration-icon" style="color:#006BFF;">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="width:28px;height:28px;"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/><circle cx="12" cy="16" r="1" fill="currentColor"/></svg>
+          </div>
+          <h3>Calendly</h3>
+          <p>Agenda reuniones y demos directamente desde la conversación.</p>
+        </div>
+
+        <!-- Zapier -->
+        <div class="card-reveal card-bg integration-card" style="transition-delay:420ms;">
+          <div class="integration-icon" style="color:#FF4A00;">
+            <svg viewBox="0 0 24 24" fill="currentColor" style="width:28px;height:28px;"><path d="M12 2l2.09 6.26L20.18 9l-4.64 4.14L16.73 20 12 16.27 7.27 20l1.19-6.86L3.82 9l6.09-.74L12 2z"/></svg>
+          </div>
+          <h3>Zapier</h3>
+          <p>Conectá con +5.000 apps. Automatizá cualquier flujo de trabajo.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════════
+       PRICING
+       ══════════════════════════════════════════════════════════ -->
+  <section id="precios" class="section-padding pricing-glow">
+    <div class="container">
+      <div class="text-center" style="max-width:640px;margin:0 auto 56px;">
+        <p class="section-label font-body">Precios</p>
+        <h2 class="section-title font-display">
+          Planes simples,<br><span class="accent-text">sin sorpresas</span>
+        </h2>
+        <p class="section-subtitle mx-auto">
+          Pagás por conversaciones. Sin costos ocultos, sin contratos largos. Escalá cuando necesites.
+        </p>
+      </div>
+
+      <div class="grid-3" style="max-width:1080px;margin:0 auto;align-items:start;">
+        <!-- Starter -->
+        <div class="card-reveal card-bg plan-card" style="border:1px solid hsl(var(--border));">
+          <h3 class="plan-name font-display">Starter</h3>
+          <div class="plan-price">
+            <span class="amount accent-text font-display">$79</span>
+            <span class="suffix font-body">/mes</span>
+          </div>
+          <div class="plan-desc font-body">1.000 conversaciones/mes</div>
+          <div class="plan-info font-body">Pago mensual<br>Autoservicio</div>
+          <a href="#contacto" class="plan-cta outline-btn font-body">Empezar ahora</a>
+          <p class="font-body" style="margin-top:20px;font-size:14px;line-height:22px;color:hsl(var(--foreground)/.7);">
+            Ideal para emprendedores y negocios que arrancan con WhatsApp.
+          </p>
+          <ul class="plan-features font-body">
+            <li><svg viewBox="0 0 20 20"><circle cx="10" cy="10" r="10" fill="#a855f7" fill-opacity="0.92"/><path d="M5.8 10.3l2.6 2.6 5.2-5.6" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg><span>1.000 conversaciones/mes</span></li>
+            <li><svg viewBox="0 0 20 20"><circle cx="10" cy="10" r="10" fill="#a855f7" fill-opacity="0.92"/><path d="M5.8 10.3l2.6 2.6 5.2-5.6" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg><span>1 agente de WhatsApp</span></li>
+            <li><svg viewBox="0 0 20 20"><circle cx="10" cy="10" r="10" fill="#a855f7" fill-opacity="0.92"/><path d="M5.8 10.3l2.6 2.6 5.2-5.6" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Historial de chats</span></li>
+            <li><svg viewBox="0 0 20 20"><circle cx="10" cy="10" r="10" fill="#a855f7" fill-opacity="0.92"/><path d="M5.8 10.3l2.6 2.6 5.2-5.6" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Soporte por email</span></li>
+          </ul>
+        </div>
+
+        <!-- Pro -->
+        <div class="card-reveal card-bg plan-card highlight" style="transition-delay:80ms;">
+          <div class="plan-badge">Más popular</div>
+          <h3 class="plan-name font-display" style="color:#c084fc;">Pro 🔥</h3>
+          <div class="plan-price">
+            <span class="amount accent-text font-display">$199</span>
+            <span class="suffix font-body">/mes</span>
+          </div>
+          <div class="plan-desc font-body">5.000 conversaciones/mes</div>
+          <div class="plan-info font-body">Pago mensual<br>Asistencia prioritaria</div>
+          <a href="#contacto" class="plan-cta brand-btn font-body">Empezar ahora</a>
+          <p class="font-body" style="margin-top:20px;font-size:14px;line-height:22px;color:hsl(var(--foreground)/.7);">
+            Para negocios con volumen real de consultas y ventas por WhatsApp.
+          </p>
+          <ul class="plan-features font-body">
+            <li><svg viewBox="0 0 20 20"><circle cx="10" cy="10" r="10" fill="#a855f7" fill-opacity="0.92"/><path d="M5.8 10.3l2.6 2.6 5.2-5.6" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg><span>5.000 conversaciones/mes</span></li>
+            <li><svg viewBox="0 0 20 20"><circle cx="10" cy="10" r="10" fill="#a855f7" fill-opacity="0.92"/><path d="M5.8 10.3l2.6 2.6 5.2-5.6" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg><span>3 agentes de WhatsApp</span></li>
+            <li><svg viewBox="0 0 20 20"><circle cx="10" cy="10" r="10" fill="#a855f7" fill-opacity="0.92"/><path d="M5.8 10.3l2.6 2.6 5.2-5.6" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Integraciones (Shopify, HubSpot...)</span></li>
+            <li><svg viewBox="0 0 20 20"><circle cx="10" cy="10" r="10" fill="#a855f7" fill-opacity="0.92"/><path d="M5.8 10.3l2.6 2.6 5.2-5.6" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Analíticas y reportes</span></li>
+            <li><svg viewBox="0 0 20 20"><circle cx="10" cy="10" r="10" fill="#a855f7" fill-opacity="0.92"/><path d="M5.8 10.3l2.6 2.6 5.2-5.6" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Soporte prioritario por chat</span></li>
+          </ul>
+        </div>
+
+        <!-- Business -->
+        <div class="card-reveal card-bg plan-card" style="border:1px solid hsl(var(--border));transition-delay:160ms;">
+          <h3 class="plan-name font-display">Business</h3>
+          <div class="plan-price">
+            <span class="amount accent-text font-display">$499</span>
+            <span class="suffix font-body">/mes</span>
+          </div>
+          <div class="plan-desc font-body">Conversaciones ilimitadas</div>
+          <div class="plan-info font-body">Pago mensual<br>Soporte dedicado</div>
+          <a href="#contacto" class="plan-cta outline-btn font-body">Empezar ahora</a>
+          <p class="font-body" style="margin-top:20px;font-size:14px;line-height:22px;color:hsl(var(--foreground)/.7);">
+            Máxima capacidad para operaciones de alto volumen.
+          </p>
+          <ul class="plan-features font-body">
+            <li><svg viewBox="0 0 20 20"><circle cx="10" cy="10" r="10" fill="#a855f7" fill-opacity="0.92"/><path d="M5.8 10.3l2.6 2.6 5.2-5.6" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Conversaciones ilimitadas</span></li>
+            <li><svg viewBox="0 0 20 20"><circle cx="10" cy="10" r="10" fill="#a855f7" fill-opacity="0.92"/><path d="M5.8 10.3l2.6 2.6 5.2-5.6" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Agentes ilimitados</span></li>
+            <li><svg viewBox="0 0 20 20"><circle cx="10" cy="10" r="10" fill="#a855f7" fill-opacity="0.92"/><path d="M5.8 10.3l2.6 2.6 5.2-5.6" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Todas las integraciones</span></li>
+            <li><svg viewBox="0 0 20 20"><circle cx="10" cy="10" r="10" fill="#a855f7" fill-opacity="0.92"/><path d="M5.8 10.3l2.6 2.6 5.2-5.6" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg><span>API y webhooks</span></li>
+            <li><svg viewBox="0 0 20 20"><circle cx="10" cy="10" r="10" fill="#a855f7" fill-opacity="0.92"/><path d="M5.8 10.3l2.6 2.6 5.2-5.6" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Onboarding 1 a 1</span></li>
+            <li><svg viewBox="0 0 20 20"><circle cx="10" cy="10" r="10" fill="#a855f7" fill-opacity="0.92"/><path d="M5.8 10.3l2.6 2.6 5.2-5.6" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Account manager dedicado</span></li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Free tier -->
+      <div class="card-reveal card-bg" style="border:1px solid hsl(var(--border));border-radius:16px;padding:24px;margin-top:20px;max-width:1080px;margin-left:auto;margin-right:auto;display:flex;flex-wrap:wrap;align-items:center;gap:20px;">
+        <div style="flex:1;min-width:260px;">
+          <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;">
+            <h3 class="font-display" style="font-size:19px;font-weight:600;">Prueba gratuita — sin tarjeta</h3>
+            <span style="background:hsl(262 70% 55%/.15);border-radius:99px;padding:3px 12px;font-size:12px;font-weight:600;color:#a78bfa;">14 días gratis</span>
+          </div>
+          <p class="font-body" style="margin-top:8px;font-size:13.5px;line-height:22px;color:hsl(var(--foreground)/.7);max-width:60ch;">
+            Probá tu agente de WhatsApp con hasta <b style="color:hsl(var(--foreground)/.9);">100 conversaciones de prueba</b>. Sin pagar nada, sin compromiso.
+          </p>
+        </div>
+        <a href="#contacto" class="outline-btn font-body" style="white-space:nowrap;flex-shrink:0;">Empezar gratis →</a>
+      </div>
+
+      <!-- Contact card -->
+      <div class="card-reveal card-bg" style="border:1px solid hsl(var(--border));border-radius:16px;padding:24px 28px;margin-top:16px;max-width:1080px;margin-left:auto;margin-right:auto;display:flex;flex-wrap:wrap;align-items:center;gap:20px;">
+        <div style="flex:1;min-width:260px;">
+          <h3 class="font-display" style="font-size:19px;font-weight:600;">¿Necesitás un plan a medida?</h3>
+          <p class="font-body" style="margin-top:8px;font-size:13.5px;line-height:22px;color:hsl(var(--foreground)/.7);max-width:60ch;">
+            Para operaciones de alto volumen o necesidades específicas, hablemos. Armamos un plan personalizado.
+          </p>
+        </div>
+        <a href="mailto:hola@s1rai.com.ar" class="outline-btn font-body" style="white-space:nowrap;flex-shrink:0;">Hablar con el equipo →</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════════
+       TESTIMONIALS
+       ══════════════════════════════════════════════════════════ -->
+  <section id="testimonios" class="section-padding">
+    <div class="container">
+      <div class="text-center" style="max-width:640px;margin:0 auto 56px;">
+        <p class="section-label font-body">Testimonios</p>
+        <h2 class="section-title font-display">
+          Negocios que ya <span class="accent-text">venden en automático</span>
+        </h2>
+      </div>
+
+      <div class="grid-3" style="max-width:1100px;margin:0 auto;align-items:stretch;">
+        <!-- Testimonial 1 -->
+        <div class="card-reveal card-bg testimonial-card">
+          <div class="testimonial-stars">
+            <svg viewBox="0 0 20 20" fill="#fbbf24"><path d="M10 1.5l2.6 5.3 5.9.9-4.2 4.1 1 5.8L10 14.9 4.7 17.6l1-5.8L1.5 7.7l5.9-.9z"/></svg>
+            <svg viewBox="0 0 20 20" fill="#fbbf24"><path d="M10 1.5l2.6 5.3 5.9.9-4.2 4.1 1 5.8L10 14.9 4.7 17.6l1-5.8L1.5 7.7l5.9-.9z"/></svg>
+            <svg viewBox="0 0 20 20" fill="#fbbf24"><path d="M10 1.5l2.6 5.3 5.9.9-4.2 4.1 1 5.8L10 14.9 4.7 17.6l1-5.8L1.5 7.7l5.9-.9z"/></svg>
+            <svg viewBox="0 0 20 20" fill="#fbbf24"><path d="M10 1.5l2.6 5.3 5.9.9-4.2 4.1 1 5.8L10 14.9 4.7 17.6l1-5.8L1.5 7.7l5.9-.9z"/></svg>
+            <svg viewBox="0 0 20 20" fill="#fbbf24"><path d="M10 1.5l2.6 5.3 5.9.9-4.2 4.1 1 5.8L10 14.9 4.7 17.6l1-5.8L1.5 7.7l5.9-.9z"/></svg>
+          </div>
+          <p class="testimonial-quote font-body">
+            "Antes tardábamos horas en responder consultas por WhatsApp. Ahora el agente contesta al instante, manda el catálogo y hasta cierra la venta solo. Las ventas subieron un 40% el primer mes."
+          </p>
+          <div class="testimonial-author">
+            <span class="testimonial-avatar" style="background:linear-gradient(140deg,hsl(28 80% 58%),hsl(68 70% 48%));">L</span>
+            <div>
+              <div class="testimonial-name font-display">Lucía Ferreyra</div>
+              <div class="testimonial-role font-body">Dueña · Tienda de indumentaria online</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Testimonial 2 -->
+        <div class="card-reveal card-bg testimonial-card" style="transition-delay:90ms;">
+          <div class="testimonial-stars">
+            <svg viewBox="0 0 20 20" fill="#fbbf24"><path d="M10 1.5l2.6 5.3 5.9.9-4.2 4.1 1 5.8L10 14.9 4.7 17.6l1-5.8L1.5 7.7l5.9-.9z"/></svg>
+            <svg viewBox="0 0 20 20" fill="#fbbf24"><path d="M10 1.5l2.6 5.3 5.9.9-4.2 4.1 1 5.8L10 14.9 4.7 17.6l1-5.8L1.5 7.7l5.9-.9z"/></svg>
+            <svg viewBox="0 0 20 20" fill="#fbbf24"><path d="M10 1.5l2.6 5.3 5.9.9-4.2 4.1 1 5.8L10 14.9 4.7 17.6l1-5.8L1.5 7.7l5.9-.9z"/></svg>
+            <svg viewBox="0 0 20 20" fill="#fbbf24"><path d="M10 1.5l2.6 5.3 5.9.9-4.2 4.1 1 5.8L10 14.9 4.7 17.6l1-5.8L1.5 7.7l5.9-.9z"/></svg>
+            <svg viewBox="0 0 20 20" fill="#fbbf24"><path d="M10 1.5l2.6 5.3 5.9.9-4.2 4.1 1 5.8L10 14.9 4.7 17.6l1-5.8L1.5 7.7l5.9-.9z"/></svg>
+          </div>
+          <p class="testimonial-quote font-body">
+            "Tenemos un e-commerce con más de 500 SKUs y el agente maneja las consultas de stock y precios perfecto. Los clientes creen que hablan con una persona real. Impresionante."
+          </p>
+          <div class="testimonial-author">
+            <span class="testimonial-avatar" style="background:linear-gradient(140deg,hsl(300 80% 58%),hsl(340 70% 48%));">M</span>
+            <div>
+              <div class="testimonial-name font-display">Marcos Gutiérrez</div>
+              <div class="testimonial-role font-body">CEO · E-commerce de tecnología</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Testimonial 3 -->
+        <div class="card-reveal card-bg testimonial-card" style="transition-delay:180ms;">
+          <div class="testimonial-stars">
+            <svg viewBox="0 0 20 20" fill="#fbbf24"><path d="M10 1.5l2.6 5.3 5.9.9-4.2 4.1 1 5.8L10 14.9 4.7 17.6l1-5.8L1.5 7.7l5.9-.9z"/></svg>
+            <svg viewBox="0 0 20 20" fill="#fbbf24"><path d="M10 1.5l2.6 5.3 5.9.9-4.2 4.1 1 5.8L10 14.9 4.7 17.6l1-5.8L1.5 7.7l5.9-.9z"/></svg>
+            <svg viewBox="0 0 20 20" fill="#fbbf24"><path d="M10 1.5l2.6 5.3 5.9.9-4.2 4.1 1 5.8L10 14.9 4.7 17.6l1-5.8L1.5 7.7l5.9-.9z"/></svg>
+            <svg viewBox="0 0 20 20" fill="#fbbf24"><path d="M10 1.5l2.6 5.3 5.9.9-4.2 4.1 1 5.8L10 14.9 4.7 17.6l1-5.8L1.5 7.7l5.9-.9z"/></svg>
+            <svg viewBox="0 0 20 20" fill="#fbbf24"><path d="M10 1.5l2.6 5.3 5.9.9-4.2 4.1 1 5.8L10 14.9 4.7 17.6l1-5.8L1.5 7.7l5.9-.9z"/></svg>
+          </div>
+          <p class="testimonial-quote font-body">
+            "Lo conectamos con Shopify y en dos días el agente ya estaba mandando productos por WhatsApp. Los carritos abandonados bajaron un montón porque el bot les recuerda y les manda el link de pago."
+          </p>
+          <div class="testimonial-author">
+            <span class="testimonial-avatar" style="background:linear-gradient(140deg,hsl(250 80% 58%),hsl(290 70% 48%));">S</span>
+            <div>
+              <div class="testimonial-name font-display">Sofía Benítez</div>
+              <div class="testimonial-role font-body">Co-fundadora · Marca de cosméticos</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════════
+       CLOSING CTA
+       ══════════════════════════════════════════════════════════ -->
+  <section id="contacto" class="section-padding" style="padding-top:0;">
+    <div class="container">
+      <div class="card-reveal cta-section" style="max-width:1100px;margin:0 auto;">
+        <div class="cta-glow"></div>
+        <div style="position:relative;">
+          <h2 class="font-display">
+            Tu próximo cliente <span class="accent-text">te está escribiendo</span>
+          </h2>
+          <p class="font-body">
+            Poné a trabajar un agente de WhatsApp hoy. Sin código, sin contratos largos, sin que nadie note la diferencia.
+          </p>
+          <div class="cta-btns">
+            <a href="https://wa.me/5491123381030?text=Hola!%20Quiero%20saber%20más%20sobre%20los%20agentes%20de%20WhatsApp" class="wa-btn font-body">
+              <svg viewBox="0 0 24 24" fill="currentColor" style="width:18px;height:18px;"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+              Escribinos por WhatsApp
+            </a>
+            <a href="mailto:hola@s1rai.com.ar" class="outline-btn font-body" style="white-space:nowrap;">
+              Hablar con ventas
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════════
+       FOOTER
+       ══════════════════════════════════════════════════════════ -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div>
+          <a href="/" class="navbar-logo font-display" style="font-size:22px;" aria-label="S1RAI">S1R<span style="color:var(--wa-green);">AI</span></a>
+          <p class="font-body" style="margin-top:16px;font-size:14px;line-height:22px;color:hsl(var(--muted));max-width:28ch;">
+            Agentes de WhatsApp con IA. Vendé más, atendé mejor, sin código.
+          </p>
+        </div>
+        <div>
+          <div class="footer-col-title font-display">Producto</div>
+          <div class="footer-col-links font-body">
+            <a href="#funcionalidades">Funcionalidades</a>
+            <a href="#integraciones">Integraciones</a>
+            <a href="#precios">Precios</a>
+            <a href="#">Seguridad</a>
+          </div>
+        </div>
+        <div>
+          <div class="footer-col-title font-display">Empresa</div>
+          <div class="footer-col-links font-body">
+            <a href="#">Nosotros</a>
+            <a href="#testimonios">Clientes</a>
+            <a href="#">Blog</a>
+            <a href="#contacto">Contacto</a>
+          </div>
+        </div>
+        <div>
+          <div class="footer-col-title font-display">Recursos</div>
+          <div class="footer-col-links font-body">
+            <a href="#">Documentación</a>
+            <a href="#">Centro de ayuda</a>
+            <a href="#">Estado del servicio</a>
+            <a href="#">API</a>
+          </div>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span class="font-body">© 2026 S1RAI. Todos los derechos reservados.</span>
+        <div class="footer-bottom-links font-body">
+          <a href="#">Privacidad</a>
+          <a href="#">Términos</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ══════════════════════════════════════════════════════════
+       SCRIPTS
+       ══════════════════════════════════════════════════════════ -->
+  <script>
+    // ── Scroll Reveal via IntersectionObserver ──
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('in');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12 });
+
+    document.querySelectorAll('.card-reveal').forEach(el => observer.observe(el));
+
+    // ── Mobile menu ──
+    const hamburgerBtn = document.getElementById('hamburgerBtn');
+    const mobileMenu = document.getElementById('mobileMenu');
+    const hamburgerIcon = document.getElementById('hamburgerIcon');
+    let menuOpen = false;
+
+    hamburgerBtn.addEventListener('click', () => {
+      menuOpen = !menuOpen;
+      mobileMenu.classList.toggle('open');
+      hamburgerIcon.innerHTML = menuOpen
+        ? '<path d="M18 6 6 18"/><path d="m6 6 12 12"/>'
+        : '<path d="M3 6h18"/><path d="M3 12h18"/><path d="M3 18h18"/>';
+    });
+
+    // Close mobile menu on link click
+    mobileMenu.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', () => {
+        menuOpen = false;
+        mobileMenu.classList.remove('open');
+        hamburgerIcon.innerHTML = '<path d="M3 6h18"/><path d="M3 12h18"/><path d="M3 18h18"/>';
+      });
+    });
+
+    // ── Smooth scroll for anchor links ──
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function (e) {
+        const href = this.getAttribute('href');
+        if (href === '#') return;
+        e.preventDefault();
+        const target = document.querySelector(href);
+        if (target) {
+          target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      });
+    });
+  </script>
 </body>
 </html>
